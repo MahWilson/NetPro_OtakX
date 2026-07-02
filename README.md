@@ -333,6 +333,7 @@ ansible-playbook playbooks/netconf_get.yml -i inventory/routers.ini
 
 # Git Workflow
 
+
 Pull latest:
 
 ```bash
@@ -350,6 +351,14 @@ Commit:
 ```bash
 git commit -m "Added router IP automation"
 ```
+Branch Policy:
+
+1. Never push directly to main
+2. All features must branch from develop
+3. All PRs merge into develop first
+4. At least one teammate must test before approval
+5. Full integration test required after each merge
+6. Only stable develop can merge into main
 
 Push:
 

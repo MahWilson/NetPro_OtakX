@@ -1,0 +1,11 @@
+services:
+  ansible:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: netpilot-controller
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true
+    network_mode: host

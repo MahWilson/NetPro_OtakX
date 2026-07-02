@@ -4,8 +4,6 @@
 
 # OtakX Team Members
 
-(Add names here)
-
 * Mah Wilson
 * Tan Jian Ming
 * Fam Qai Zen

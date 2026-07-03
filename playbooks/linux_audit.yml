@@ -24,3 +24,12 @@
         msg:
           - "CPU Model: {{ cpu_model }}"
           - "CPU Cores: {{ cpu_cores }}"
+
+    - name: Get memory usage
+      ansible.builtin.command: free -h
+      register: memory_usage
+      changed_when: false
+
+    - name: Display memory usage
+      ansible.builtin.debug:
+        var: memory_usage.stdout_lines

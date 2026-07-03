@@ -1,6 +1,6 @@
 ---
 - name: Linux System Audit
-  hosts: linux
+  hosts: devasc
   gather_facts: yes
   tasks:
     - name: Get current date and time
@@ -8,8 +8,8 @@
       register: current_datetime
       changed_when: false
 
-    - name: Show hostname and datetime
+    - name: Display hostname and datetime
       ansible.builtin.debug:
         msg:
-          hostname: "{{ ansible_hostname }}"
-          datetime: "{{ current_datetime.stdout }}"
+          - "Hostname: {{ ansible_hostname }}"
+          - "DateTime: {{ current_datetime.stdout }}"

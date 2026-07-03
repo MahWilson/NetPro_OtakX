@@ -51,3 +51,12 @@
     - name: Display logged-in users
       ansible.builtin.debug:
         var: logged_in_users.stdout_lines
+
+    - name: Get top 5 processes by CPU
+      ansible.builtin.shell: ps aux --sort=-%cpu | head -n 6
+      register: top_processes
+      changed_when: false
+
+    - name: Display top 5 processes
+      ansible.builtin.debug:
+        var: top_processes.stdout_lines

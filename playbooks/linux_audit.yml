@@ -13,3 +13,14 @@
         msg:
           - "Hostname: {{ ansible_hostname }}"
           - "DateTime: {{ current_datetime.stdout }}"
+
+    - name: Get CPU info
+      ansible.builtin.set_fact:
+        cpu_model: "{{ ansible_processor[2] | default(ansible_processor[0]) }}"
+        cpu_cores: "{{ ansible_processor_vcpus }}"
+
+    - name: Display CPU info
+      ansible.builtin.debug:
+        msg:
+          - "CPU Model: {{ cpu_model }}"
+          - "CPU Cores: {{ cpu_cores }}"

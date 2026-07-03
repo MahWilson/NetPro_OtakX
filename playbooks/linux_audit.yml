@@ -42,3 +42,12 @@
     - name: Display disk usage
       ansible.builtin.debug:
         var: disk_usage.stdout_lines
+
+    - name: Get logged-in users
+      ansible.builtin.command: who
+      register: logged_in_users
+      changed_when: false
+
+    - name: Display logged-in users
+      ansible.builtin.debug:
+        var: logged_in_users.stdout_lines

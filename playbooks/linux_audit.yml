@@ -1,6 +1,6 @@
 ---
 - name: Linux System Audit
-  hosts: devasc
+  hosts: linux
   gather_facts: yes
   tasks:
     - name: Get current date and time

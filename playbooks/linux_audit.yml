@@ -1,0 +1,15 @@
+---
+- name: Linux System Audit
+  hosts: linux
+  gather_facts: yes
+  tasks:
+    - name: Get current date and time
+      ansible.builtin.command: date
+      register: current_datetime
+      changed_when: false
+
+    - name: Show hostname and datetime
+      ansible.builtin.debug:
+        msg:
+          hostname: "{{ ansible_hostname }}"
+          datetime: "{{ current_datetime.stdout }}"

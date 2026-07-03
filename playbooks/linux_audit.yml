@@ -33,3 +33,12 @@
     - name: Display memory usage
       ansible.builtin.debug:
         var: memory_usage.stdout_lines
+
+    - name: Get disk usage
+      ansible.builtin.command: df -h
+      register: disk_usage
+      changed_when: false
+
+    - name: Display disk usage
+      ansible.builtin.debug:
+        var: disk_usage.stdout_lines

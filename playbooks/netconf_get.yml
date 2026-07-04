@@ -3,4 +3,20 @@
   gather_facts: no
   connection: netconf
 
-  tasks: []
+  tasks:
+
+    - name: "[1/4] Get device facts via NETCONF"
+      netconf_get:
+        filter: |
+          <filter>
+            <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+              <hostname/>
+              <version/>
+            </native>
+          </filter>
+      register: device_facts
+      ignore_errors: yes
+
+    - name: "[1/4] Display device facts"
+      debug:
+        msg: "{{ device_facts.output | default('No data returned') }}"

@@ -17,3 +17,9 @@
         parents: interface GigabitEthernet1
         lines:
           - description Managed by NetPilot Core Router Automation
+
+    - name: Configure interface IP address
+      cisco.ios.ios_config:
+        parents: interface GigabitEthernet1
+        lines:
+          - ip address 192.168.56.101 255.255.255.0      

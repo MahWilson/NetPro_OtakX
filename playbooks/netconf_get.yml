@@ -41,3 +41,28 @@
       debug:
         msg: "{{ interface_states.output | default('No interface data returned') }}"
 
+    - name: "[3/4] Get interface configuration via NETCONF"
+      netconf_get:
+        filter: |
+          <filter>
+            <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+              <interface>
+                <name/>
+                <description/>
+                <type/>
+                <enabled/>
+                <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+                  <address>
+                    <ip/>
+                    <prefix-length/>
+                  </address>
+                </ipv4>
+              </interface>
+            </interfaces>
+          </filter>
+      register: interface_config
+      ignore_errors: yes
+
+    - name: "[3/4] Display interface configuration"
+      debug:
+        msg: "{{ interface_config.output | default('No interface config returned') }}"

@@ -33,3 +33,18 @@
       cisco.ios.ios_config:
         lines:
           - ip route 10.10.10.0 255.255.255.0 192.168.56.1
+
+    - name: Retrieve router device information
+      cisco.ios.ios_command:
+        commands:
+          - show version
+          - show ip interface brief
+          - show running-config | include username
+          - show running-config | include banner
+          - show running-config | include description
+          - show running-config | include ip route
+      register: router_info
+
+    - name: Display router device information
+      debug:
+        var: router_info.stdout_lines      

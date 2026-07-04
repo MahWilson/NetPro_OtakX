@@ -17,3 +17,7 @@
         content: "{{ netconf_data | to_nice_json }}"
         dest: "/app/reports/{{ inventory_hostname }}_netconf.json"
       delegate_to: localhost
+
+    - name: Display NETCONF data
+      debug:
+        var: netconf_data

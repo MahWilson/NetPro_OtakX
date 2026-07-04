@@ -4,23 +4,6 @@
   connection: network_cli
 
   tasks:
-    - name: Get running configuration
-      cisco.ios.ios_command:
-        commands:
-          - show running-config
-      register: running_config
-
-    - name: Get interface status
-      cisco.ios.ios_command:
-        commands:
-          - show ip interface brief
-      register: interface_status
-
-    - name: Get routing table
-      cisco.ios.ios_command:
-        commands:
-          - show ip route
-      register: routing_table
 
     - name: Consolidate router configuration data
       set_fact:
@@ -29,13 +12,3 @@
           running_config: "{{ running_config.stdout[0].splitlines() }}"
           interface_status: "{{ interface_status.stdout[0].splitlines() }}"
           routing_table: "{{ routing_table.stdout[0].splitlines() }}"
-
-    - name: Save router config as JSON
-      copy:
-        content: "{{ router_data | to_nice_json }}"
-        dest: "/app/reports/{{ inventory_hostname }}_router_backup.json"
-      delegate_to: localhost
-
-    - name: Display router data summary
-      debug:
-        var: router_data

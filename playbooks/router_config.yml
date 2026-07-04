@@ -18,3 +18,7 @@
         content: "{{ router_data | to_nice_json }}"
         dest: "/app/reports/{{ inventory_hostname }}_router_backup.json"
       delegate_to: localhost
+
+    - name: Display router data summary
+      debug:
+        var: router_data

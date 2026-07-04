@@ -1,0 +1,13 @@
+{# Jinja2 template for configuring Cisco IOS interfaces #}
+{% for interface in netpilot_interfaces %}
+interface {{ interface.name }}
+  description {{ interface.description }}
+  {% if interface.ip_address is defined and interface.subnet_mask is defined %}
+  ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
+  {% endif %}
+  {% if interface.enabled | default(true) %}
+  no shutdown
+  {% else %}
+  shutdown
+  {% endif %}
+{% endfor %}

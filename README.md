@@ -1,4 +1,4 @@
-## NetPilot Core
+# NetPilot Core
 
 **Lightweight Infrastructure Automation and System Audit Framework**
 

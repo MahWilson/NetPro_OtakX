@@ -1,7 +1,8 @@
-FROM python:3.11
+FROM python:3.8
 
-RUN pip install ansible netmiko ncclient
+RUN pip install ansible==2.9.9 netmiko==3.1.1 ncclient==0.6.7 paramiko==2.7.1
 
 WORKDIR /app
 
 CMD ["/bin/bash"]
+

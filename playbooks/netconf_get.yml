@@ -1,0 +1,13 @@
+- name: NETCONF Device Facts Test
+  hosts: cisco
+  gather_facts: no
+
+  tasks:
+    - name: Get interface configuration via NETCONF
+      netconf_get:
+        filter: <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces"/>
+      register: netconf_output
+
+    - name: Print NETCONF output
+      debug:
+        var: netconf_output

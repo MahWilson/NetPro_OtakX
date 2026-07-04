@@ -1,0 +1,28 @@
+- name: Simple Linux Audit Test
+  hosts: linux
+  gather_facts: yes
+
+  tasks:
+    - name: Show hostname
+      debug:
+        msg: "Hostname is {{ ansible_hostname }}"
+
+    - name: Show OS
+      debug:
+        msg: "OS is {{ ansible_distribution }} {{ ansible_distribution_version }}"
+
+    - name: Show uptime
+      command: uptime
+      register: uptime_output
+
+    - name: Print uptime
+      debug:
+        var: uptime_output.stdout
+
+    - name: Show disk usage
+      command: df -h /
+      register: disk_output
+
+    - name: Print disk usage
+      debug:
+        var: disk_output.stdout

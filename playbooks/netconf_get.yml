@@ -11,3 +11,9 @@
           hostname: "{{ inventory_hostname }}"
           interfaces: "{{ netconf_interfaces.stdout | default(netconf_interfaces) }}"
           system: "{{ netconf_system.stdout | default(netconf_system) }}"
+
+    - name: Save NETCONF data as JSON
+      copy:
+        content: "{{ netconf_data | to_nice_json }}"
+        dest: "/app/reports/{{ inventory_hostname }}_netconf.json"
+      delegate_to: localhost

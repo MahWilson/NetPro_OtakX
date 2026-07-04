@@ -1,14 +1,41 @@
-- name: Router Test
-  hosts: cisco
+- name: Cisco Router Configuration Backup
+  hosts: routers
   gather_facts: no
-  
+  connection: network_cli
 
   tasks:
-    - name: Show version
+    - name: Get running configuration
       cisco.ios.ios_command:
         commands:
-          - show version
-      register: version
+          - show running-config
+      register: running_config
 
-    - debug:
-        var: version.stdout[0]
+    - name: Get interface status
+      cisco.ios.ios_command:
+        commands:
+          - show ip interface brief
+      register: interface_status
+
+    - name: Get routing table
+      cisco.ios.ios_command:
+        commands:
+          - show ip route
+      register: routing_table
+
+    - name: Consolidate router configuration data
+      set_fact:
+        router_data:
+          hostname: "{{ inventory_hostname }}"
+          running_config: "{{ running_config.stdout[0].splitlines() }}"
+          interface_status: "{{ interface_status.stdout[0].splitlines() }}"
+          routing_table: "{{ routing_table.stdout[0].splitlines() }}"
+
+    - name: Save router config as JSON
+      copy:
+        content: "{{ router_data | to_nice_json }}"
+        dest: "/app/reports/{{ inventory_hostname }}_router_backup.json"
+      delegate_to: localhost
+
+    - name: Display router data summary
+      debug:
+        var: router_data

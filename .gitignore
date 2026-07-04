@@ -1,4 +1,0 @@
-inventory/linux.ini
-inventory/routers.ini
-*.pyc
-__pycache__/

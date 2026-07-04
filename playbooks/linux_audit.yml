@@ -1,50 +1,15 @@
+---
 - name: Linux System Audit
   hosts: linux
   gather_facts: yes
-
   tasks:
     - name: Get current date and time
-      command: date
+      ansible.builtin.command: date
       register: current_datetime
       changed_when: false
 
-    - name: Get CPU info
-      set_fact:
-        cpu_model: "{{ ansible_processor[2] | default(ansible_processor[0]) }}"
-        cpu_cores: "{{ ansible_processor_vcpus }}"
-
-    - name: Get memory usage
-      command: free -h
-      register: memory_usage
-      changed_when: false
-
-    - name: Get disk usage
-      command: df -h
-      register: disk_usage
-      changed_when: false
-
-    - name: Get logged-in users
-      command: who
-      register: logged_in_users
-      changed_when: false
-
-    - name: Get top processes by CPU
-      shell: ps aux --sort=-%cpu | head -n 6
-      register: top_processes
-      changed_when: false
-
-    - name: Consolidate audit data
-      set_fact:
-        audit_data:
-          hostname: "{{ ansible_hostname }}"
-          datetime: "{{ current_datetime.stdout }}"
-          cpu_model: "{{ cpu_model }}"
-          cpu_cores: "{{ cpu_cores }}"
-          memory: "{{ memory_usage.stdout_lines }}"
-          disk: "{{ disk_usage.stdout_lines }}"
-          logged_in_users: "{{ logged_in_users.stdout_lines }}"
-          top_processes: "{{ top_processes.stdout_lines }}"
-
-    - name: Display audit data
-      debug:
-        var: audit_data
+    - name: Display hostname and datetime
+      ansible.builtin.debug:
+        msg:
+          - "Hostname: {{ ansible_hostname }}"
+          - "DateTime: {{ current_datetime.stdout }}"

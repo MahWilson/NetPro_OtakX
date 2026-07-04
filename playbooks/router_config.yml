@@ -12,3 +12,9 @@
           running_config: "{{ running_config.stdout[0].splitlines() }}"
           interface_status: "{{ interface_status.stdout[0].splitlines() }}"
           routing_table: "{{ routing_table.stdout[0].splitlines() }}"
+
+    - name: Save router config as JSON
+      copy:
+        content: "{{ router_data | to_nice_json }}"
+        dest: "/app/reports/{{ inventory_hostname }}_router_backup.json"
+      delegate_to: localhost

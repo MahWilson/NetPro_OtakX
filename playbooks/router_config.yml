@@ -11,3 +11,9 @@
           Unauthorized access is prohibited.
           This router is managed by NetPilot Core automation.
         state: present
+
+    - name: Configure interface description
+      cisco.ios.ios_config:
+        parents: interface GigabitEthernet1
+        lines:
+          - description Managed by NetPilot Core Router Automation

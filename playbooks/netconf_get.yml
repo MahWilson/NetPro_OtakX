@@ -66,3 +66,25 @@
     - name: "[3/4] Display interface configuration"
       debug:
         msg: "{{ interface_config.output | default('No interface config returned') }}"
+
+    - name: "[4/4] Get full running configuration via NETCONF"
+      netconf_get:
+        source: running
+      register: running_config
+      ignore_errors: yes
+
+    - name: "[4/4] Display running configuration (first 3000 chars)"
+      debug:
+        msg: "{{ (running_config.output | default('No running config returned'))[:3000] }}"
+
+    - name: "NETCONF retrieval complete"
+      debug:
+        msg:
+          - "============================================"
+          - " NETCONF Data Retrieval Summary"
+          - "============================================"
+          - " Device Facts   : {{ 'OK' if device_facts is not failed else 'FAILED' }}"
+          - " Interface State: {{ 'OK' if interface_states is not failed else 'FAILED' }}"
+          - " Interface Config: {{ 'OK' if interface_config is not failed else 'FAILED' }}"
+          - " Running Config  : {{ 'OK' if running_config is not failed else 'FAILED' }}"
+          - "============================================"

@@ -1,0 +1,11 @@
+banner {{ netpilot_banner.type | default('motd') }} {{ netpilot_banner.delimiter | default('^C') }}
+********************************************************************************
+*                                                                              *
+*  {{ netpilot_banner.title | default('NetPilot Core Network Device') }}
+*                                                                              *
+*  Organization: {{ netpilot_banner.organization | default('NetOps Security') }}
+*  Contact:      {{ netpilot_banner.contact | default('noc@netpilot.local') }}
+*  Warning:      {{ netpilot_banner.warning | default('Unauthorized access is prohibited.') }}
+*                                                                              *
+********************************************************************************
+{{ netpilot_banner.delimiter | default('^C') }}

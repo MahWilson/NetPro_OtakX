@@ -45,6 +45,12 @@
           logged_in_users: "{{ logged_in_users.stdout_lines }}"
           top_processes: "{{ top_processes.stdout_lines }}"
 
+    - name: Save audit data as JSON
+      copy:
+        content: "{{ audit_data | to_nice_json }}"
+        dest: "/app/reports/{{ ansible_hostname }}_audit.json"
+      delegate_to: localhost
+
     - name: Display audit data
       debug:
         var: audit_data

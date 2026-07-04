@@ -227,14 +227,20 @@ Location:
 docker/Dockerfile
 ```
 
-Example:
+🧪 Running Playbooks
+Router automation (Cisco IOS)
+```bash
+ansible-playbook playbooks/router_config.yml -i inventory/routers.ini
+```
 
-```dockerfile
-FROM python:3.11
+Linux system audit
+```bash
+ansible-playbook playbooks/linux_audit.yml -i inventory/linux.ini
+```
 
-RUN pip install ansible netmiko ncclient
-
-WORKDIR /app
+NETCONF retrieval
+```bash
+ansible-playbook playbooks/netconf_get.yml -i inventory/routers.ini
 ```
 
 ---

@@ -1,40 +1,40 @@
----
 - name: Linux System Audit
   hosts: linux
   gather_facts: yes
+
   tasks:
     - name: Get current date and time
-      ansible.builtin.command: date
+      command: date
       register: current_datetime
       changed_when: false
 
     - name: Get CPU info
-      ansible.builtin.set_fact:
+      set_fact:
         cpu_model: "{{ ansible_processor[2] | default(ansible_processor[0]) }}"
         cpu_cores: "{{ ansible_processor_vcpus }}"
 
     - name: Get memory usage
-      ansible.builtin.command: free -h
+      command: free -h
       register: memory_usage
       changed_when: false
 
     - name: Get disk usage
-      ansible.builtin.command: df -h
+      command: df -h
       register: disk_usage
       changed_when: false
 
     - name: Get logged-in users
-      ansible.builtin.command: who
+      command: who
       register: logged_in_users
       changed_when: false
 
-    - name: Get top 5 processes by CPU
-      ansible.builtin.shell: ps aux --sort=-%cpu | head -n 6
+    - name: Get top processes by CPU
+      shell: ps aux --sort=-%cpu | head -n 6
       register: top_processes
       changed_when: false
 
-    - name: Consolidate all audit data into JSON
-      ansible.builtin.set_fact:
+    - name: Consolidate audit data
+      set_fact:
         audit_data:
           hostname: "{{ ansible_hostname }}"
           datetime: "{{ current_datetime.stdout }}"
@@ -45,12 +45,6 @@
           logged_in_users: "{{ logged_in_users.stdout_lines }}"
           top_processes: "{{ top_processes.stdout_lines }}"
 
-    - name: Save audit data as JSON for reporting
-      ansible.builtin.copy:
-        content: "{{ audit_data | to_nice_json }}"
-        dest: "/app/reports/{{ ansible_hostname }}_audit.json"
-      delegate_to: localhost
-
-    - name: Display consolidated audit data
-      ansible.builtin.debug:
+    - name: Display audit data
+      debug:
         var: audit_data

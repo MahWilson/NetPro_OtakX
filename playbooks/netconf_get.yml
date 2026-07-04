@@ -20,3 +20,24 @@
     - name: "[1/4] Display device facts"
       debug:
         msg: "{{ device_facts.output | default('No data returned') }}"
+
+    - name: "[2/4] Get interface states via NETCONF"
+      netconf_get:
+        filter: |
+          <filter>
+            <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+              <interface>
+                <name/>
+                <admin-status/>
+                <oper-status/>
+                <speed/>
+              </interface>
+            </interfaces-state>
+          </filter>
+      register: interface_states
+      ignore_errors: yes
+
+    - name: "[2/4] Display interface states"
+      debug:
+        msg: "{{ interface_states.output | default('No interface data returned') }}"
+

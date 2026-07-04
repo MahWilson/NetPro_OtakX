@@ -27,4 +27,9 @@
     - name: Create local user account
       cisco.ios.ios_config:
         lines:
-          - username netpilot privilege 15 password 0 NetPilot123!  
+          - username netpilot privilege 15 password 0 NetPilot123! 
+
+    - name: Configure static route
+      cisco.ios.ios_config:
+        lines:
+          - ip route 10.10.10.0 255.255.255.0 192.168.56.1

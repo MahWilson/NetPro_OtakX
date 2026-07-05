@@ -5,99 +5,123 @@
 
   tasks:
 
-    - name: "[1/4] Get device facts via NETCONF"
-      netconf_get:
+    - name: "[1/6] Get hostname via NETCONF"
+      ansible.netcommon.netconf_get:
+        source: running
         filter: |
           <filter>
             <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
               <hostname/>
-              <version/>
             </native>
           </filter>
-      register: device_facts
+      register: device_hostname
       ignore_errors: yes
 
-    - name: "[1/4] Display device facts"
+    - name: "[1/6] Display hostname"
       debug:
-        msg: "{{ device_facts.output | default('No data returned') }}"
+        msg: "{{ device_hostname.stdout | default('No hostname returned', true) | string | truncate(3000, False, '') }}"
 
-    - name: "[2/4] Get interface states via NETCONF"
-      netconf_get:
+    - name: "[2/6] Get interface configuration via NETCONF"
+      ansible.netcommon.netconf_get:
+        source: running
         filter: |
           <filter>
-            <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
-              <interface>
-                <name/>
-                <admin-status/>
-                <oper-status/>
-                <speed/>
-              </interface>
-            </interfaces-state>
-          </filter>
-      register: interface_states
-      ignore_errors: yes
-
-    - name: "[2/4] Display interface states"
-      debug:
-        msg: "{{ interface_states.output | default('No interface data returned') }}"
-
-    - name: "[3/4] Get interface configuration via NETCONF"
-      netconf_get:
-        filter: |
-          <filter>
-            <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
-              <interface>
-                <name/>
-                <description/>
-                <type/>
-                <enabled/>
-                <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
-                  <address>
-                    <ip/>
-                    <prefix-length/>
-                  </address>
-                </ipv4>
-              </interface>
-            </interfaces>
+            <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+              <interface/>
+            </native>
           </filter>
       register: interface_config
       ignore_errors: yes
 
-    - name: "[3/4] Display interface configuration"
+    - name: "[2/6] Display interface configuration"
       debug:
-        msg: "{{ interface_config.output | default('No interface config returned') }}"
+        msg: "{{ interface_config.stdout | default('No interface config returned', true) | string | truncate(3000, False, '') }}"
 
-    - name: "[4/4] Get full running configuration via NETCONF"
-      netconf_get:
+    - name: "[3/6] Get user configuration via NETCONF"
+      ansible.netcommon.netconf_get:
+        source: running
+        filter: |
+          <filter>
+            <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+              <username/>
+            </native>
+          </filter>
+      register: user_config
+      ignore_errors: yes
+
+    - name: "[3/6] Display user configuration"
+      debug:
+        msg: "{{ user_config.stdout | default('No user config returned', true) | string | truncate(3000, False, '') }}"
+
+    - name: "[4/6] Get static routes configuration via NETCONF"
+      ansible.netcommon.netconf_get:
+        source: running
+        filter: |
+          <filter>
+            <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+              <ip>
+                <route/>
+              </ip>
+            </native>
+          </filter>
+      register: static_routes
+      ignore_errors: yes
+
+    - name: "[4/6] Display static routes configuration"
+      debug:
+        msg: "{{ static_routes.stdout | default('No static routes returned', true) | string | truncate(3000, False, '') }}"
+
+    - name: "[5/6] Get banner configuration via NETCONF"
+      ansible.netcommon.netconf_get:
+        source: running
+        filter: |
+          <filter>
+            <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+              <banner/>
+            </native>
+          </filter>
+      register: banner_config
+      ignore_errors: yes
+
+    - name: "[5/6] Display banner configuration"
+      debug:
+        msg: "{{ banner_config.stdout | default('No banner config returned', true) | string | truncate(3000, False, '') }}"
+
+    - name: "[6/6] Get full running configuration via NETCONF"
+      ansible.netcommon.netconf_get:
         source: running
       register: running_config
       ignore_errors: yes
 
-    - name: "[4/4] Display running configuration (first 3000 chars)"
+    - name: "[6/6] Display running configuration (first 3000 chars)"
       debug:
-        msg: "{{ (running_config.output | default('No running config returned'))[:3000] }}"
+        msg: "{{ running_config.stdout | default('No running config returned', true) | string | truncate(3000, False, '') }}"
 
-    - name: "NETCONF retrieval complete"
+    - name: NETCONF retrieval complete
       debug:
         msg:
           - "============================================"
           - " NETCONF Data Retrieval Summary"
           - "============================================"
-          - " Device Facts   : {{ 'OK' if device_facts is not failed else 'FAILED' }}"
-          - " Interface State: {{ 'OK' if interface_states is not failed else 'FAILED' }}"
-          - " Interface Config: {{ 'OK' if interface_config is not failed else 'FAILED' }}"
-          - " Running Config  : {{ 'OK' if running_config is not failed else 'FAILED' }}"
+          - " Hostname       : {{ 'FAILED' if device_hostname.failed | default(false) else 'OK' }}"
+          - " Interface Conf : {{ 'FAILED' if interface_config.failed | default(false) else 'OK' }}"
+          - " User Config    : {{ 'FAILED' if user_config.failed | default(false) else 'OK' }}"
+          - " Static Routes  : {{ 'FAILED' if static_routes.failed | default(false) else 'OK' }}"
+          - " Banner Config  : {{ 'FAILED' if banner_config.failed | default(false) else 'OK' }}"
+          - " Running Config : {{ 'FAILED' if running_config.failed | default(false) else 'OK' }}"
           - "============================================"
 
     - name: Consolidate NETCONF data into JSON
       set_fact:
         netconf_data:
           hostname: "{{ inventory_hostname }}"
-          device_facts: "{{ device_facts.output | default('No data returned') }}"
-          interface_states: "{{ interface_states.output | default('No interface data returned') }}"
-          interface_config: "{{ interface_config.output | default('No interface config returned') }}"
-          running_config: "{{ running_config.output | default('No running config returned') }}"
-          
+          device_facts: "{{ device_hostname.stdout | default('No hostname returned', true) | string }}"
+          interface_config: "{{ interface_config.stdout | default('No interface config returned', true) | string }}"
+          user_config: "{{ user_config.stdout | default('No user config returned', true) | string }}"
+          static_routes: "{{ static_routes.stdout | default('No static routes config returned', true) | string }}"
+          banner_config: "{{ banner_config.stdout | default('No banner config returned', true) | string }}"
+          running_config: "{{ running_config.stdout | default('No running config returned', true) | string }}"
+
     - name: Save NETCONF data as JSON
       copy:
         content: "{{ netconf_data | to_nice_json }}"

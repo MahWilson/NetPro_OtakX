@@ -7,7 +7,6 @@
 
     - name: "[1/4] Get device facts via NETCONF"
       ansible.netcommon.netconf_get:
-        display: pretty
         filter: |
           <filter>
             <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
@@ -24,7 +23,6 @@
 
     - name: "[2/4] Get interface states via NETCONF"
       ansible.netcommon.netconf_get:
-        display: pretty
         filter: |
           <filter>
             <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
@@ -45,7 +43,6 @@
 
     - name: "[3/4] Get interface configuration via NETCONF"
       ansible.netcommon.netconf_get:
-        display: pretty
         filter: |
           <filter>
             <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
@@ -73,7 +70,6 @@
     - name: "[4/4] Get full running configuration via NETCONF"
       ansible.netcommon.netconf_get:
         source: running
-        display: pretty
       register: running_config
       ignore_errors: yes
 

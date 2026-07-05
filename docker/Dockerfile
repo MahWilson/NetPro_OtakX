@@ -7,11 +7,15 @@ RUN pip install \
     paramiko==2.7.1 \
     jinja2==2.10.3 \
     markupsafe==1.1.1 \
-    lxml
-
-# Install Ansible Galaxy collections needed for NETCONF and Cisco IOS
-RUN ansible-galaxy collection install ansible.netcommon cisco.ios
+    lxml \
+    cryptography==2.8
 
 WORKDIR /app
+
+# copy requirements
+COPY requirements.yml /app/requirements.yml
+
+# install collections
+RUN ansible-galaxy collection install -r /app/requirements.yml
 
 CMD ["/bin/bash"]

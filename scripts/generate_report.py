@@ -104,3 +104,35 @@ for report in netconf_reports:
     """
 
 html += "</div>"
+
+
+# Router Section
+html += "<div class='section'><h2>Cisco Router Configuration Backup</h2>"
+
+for report in router_reports:
+    html += f"""
+    <h3>{report.get('hostname')}</h3>
+
+    <h4>Running Configuration</h4>
+    <pre>{"\n".join(report.get('running_config', []))}</pre>
+
+    <h4>Interface Status</h4>
+    <pre>{"\n".join(report.get('interface_status', []))}</pre>
+
+    <h4>Routing Table</h4>
+    <pre>{"\n".join(report.get('routing_table', []))}</pre>
+    """
+
+html += "</div>"
+
+
+html += """
+</body>
+</html>
+"""
+
+
+with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+    f.write(html)
+
+print(f"HTML report generated: {OUTPUT_FILE}")

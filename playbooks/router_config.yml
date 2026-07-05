@@ -49,3 +49,9 @@
     - name: Display router device information
       debug:
         var: router_info.stdout_lines      
+
+    - name: Consolidate router automation data into JSON
+      set_fact:
+        router_data:
+          hostname: "{{ inventory_hostname }}"
+          router_info: "{{ router_info.stdout_lines | default([]) }}"

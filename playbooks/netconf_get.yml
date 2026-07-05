@@ -97,7 +97,7 @@
           interface_states: "{{ interface_states.output | default('No interface data returned') }}"
           interface_config: "{{ interface_config.output | default('No interface config returned') }}"
           running_config: "{{ running_config.output | default('No running config returned') }}"
-
+          
     - name: Save NETCONF data as JSON
       copy:
         content: "{{ netconf_data | to_nice_json }}"

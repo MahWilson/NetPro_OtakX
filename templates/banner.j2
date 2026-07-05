@@ -1,9 +1,11 @@
-banner {{ netpilot_banner.type }} {{ netpilot_banner.delimiter }}
-======================================================================
-{{ netpilot_banner.title }}
-======================================================================
-Organization: {{ netpilot_banner.organization }}
-Contact:      {{ netpilot_banner.contact }}
-Warning:      {{ netpilot_banner.warning }}
-======================================================================
-{{ netpilot_banner.delimiter }}
+banner {{ netpilot_banner.type | default('motd') }} {{ netpilot_banner.delimiter | default('#') }}
+
+========================================================================
+{{ netpilot_banner.title | default('AUTHORIZED ACCESS ONLY') }}
+========================================================================
+Organization : {{ netpilot_banner.organization | default('NetPilot Core') }}
+Contact      : {{ netpilot_banner.contact | default('administrator') }}
+Warning      : {{ netpilot_banner.warning | default('Unauthorized access prohibited.') }}
+========================================================================
+
+{{ netpilot_banner.delimiter | default('#') }}

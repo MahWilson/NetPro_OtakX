@@ -1,23 +1,90 @@
-- name: NETCONF Device Data Collection
-  hosts: routers
+- name: NETCONF Device Data Retrieval
+  hosts: cisco
   gather_facts: no
   connection: netconf
 
   tasks:
 
-    - name: Consolidate NETCONF data
-      set_fact:
-        netconf_data:
-          hostname: "{{ inventory_hostname }}"
-          interfaces: "{{ netconf_interfaces.stdout | default(netconf_interfaces) }}"
-          system: "{{ netconf_system.stdout | default(netconf_system) }}"
+    - name: "[1/4] Get device facts via NETCONF"
+      netconf_get:
+        filter: |
+          <filter>
+            <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+              <hostname/>
+              <version/>
+            </native>
+          </filter>
+      register: device_facts
+      ignore_errors: yes
 
-    - name: Save NETCONF data as JSON
-      copy:
-        content: "{{ netconf_data | to_nice_json }}"
-        dest: "/app/reports/{{ inventory_hostname }}_netconf.json"
-      delegate_to: localhost
-
-    - name: Display NETCONF data
+    - name: "[1/4] Display device facts"
       debug:
-        var: netconf_data
+        msg: "{{ device_facts.output | default('No data returned') }}"
+
+    - name: "[2/4] Get interface states via NETCONF"
+      netconf_get:
+        filter: |
+          <filter>
+            <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+              <interface>
+                <name/>
+                <admin-status/>
+                <oper-status/>
+                <speed/>
+              </interface>
+            </interfaces-state>
+          </filter>
+      register: interface_states
+      ignore_errors: yes
+
+    - name: "[2/4] Display interface states"
+      debug:
+        msg: "{{ interface_states.output | default('No interface data returned') }}"
+
+    - name: "[3/4] Get interface configuration via NETCONF"
+      netconf_get:
+        filter: |
+          <filter>
+            <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+              <interface>
+                <name/>
+                <description/>
+                <type/>
+                <enabled/>
+                <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+                  <address>
+                    <ip/>
+                    <prefix-length/>
+                  </address>
+                </ipv4>
+              </interface>
+            </interfaces>
+          </filter>
+      register: interface_config
+      ignore_errors: yes
+
+    - name: "[3/4] Display interface configuration"
+      debug:
+        msg: "{{ interface_config.output | default('No interface config returned') }}"
+
+    - name: "[4/4] Get full running configuration via NETCONF"
+      netconf_get:
+        source: running
+      register: running_config
+      ignore_errors: yes
+
+    - name: "[4/4] Display running configuration (first 3000 chars)"
+      debug:
+        msg: "{{ (running_config.output | default('No running config returned'))[:3000] }}"
+
+    - name: "NETCONF retrieval complete"
+      debug:
+        msg:
+          - "============================================"
+          - " NETCONF Data Retrieval Summary"
+          - "============================================"
+          - " Device Facts   : {{ 'OK' if device_facts is not failed else 'FAILED' }}"
+          - " Interface State: {{ 'OK' if interface_states is not failed else 'FAILED' }}"
+          - " Interface Config: {{ 'OK' if interface_config is not failed else 'FAILED' }}"
+          - " Running Config  : {{ 'OK' if running_config is not failed else 'FAILED' }}"
+          - "============================================"

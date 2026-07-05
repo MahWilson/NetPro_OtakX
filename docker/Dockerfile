@@ -6,7 +6,11 @@ RUN pip install \
     ncclient==0.6.7 \
     paramiko==2.7.1 \
     jinja2==2.10.3 \
-    markupsafe==1.1.1
+    markupsafe==1.1.1 \
+    lxml
+
+# Install Ansible Galaxy collections needed for NETCONF and Cisco IOS
+RUN ansible-galaxy collection install ansible.netcommon cisco.ios
 
 WORKDIR /app
 

@@ -93,63 +93,26 @@ devasc      3182  3.1  0.1  14124  6588 ?        S    04:48   0:00 sshd: devasc@
 root        2365  2.5  3.0 637052 121464 tty7    Ssl+ 04:47   0:02 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
 root         856  1.6  1.0 1851020 41808 ?       Ssl  04:46   0:01 /usr/lib/snapd/snapd
 root        3090  1.6  0.2  13992  9176 ?        Ss   04:48   0:00 sshd: devasc [priv]</pre>
-    </div>
-<div class='section'>
-    <h2>NETCONF Device Data (Structured View)</h2>
+    </div><div class='section'><h2>NETCONF Device Data</h2>
+    <h3>router1</h3>
 
-    <h3>Device Summary: router1</h3>
-    
-    <table border="1" cellpadding="5" style="border-collapse: collapse; background: #fff; width: 100%; margin-bottom: 15px;">
-        <tr style="background: #eef;">
-            <th>Attribute</th>
-            <th>Value</th>
-        </tr>
-        <tr><td><b>Hostname</b></td><td>router1</td></tr>
-        <tr><td><b>Banner MOTD</b></td><td><pre style="margin:0; background:none; color:#333; padding:0;">^C</pre></td></tr>
-    </table>
+    <h4>Device Summary</h4>
+    <pre>
+Hostname: router1
+Version : Unknown version
+    </pre>
+
+    <h4>Interface Info</h4>
+    <pre>
+MAC Address: Not found/DHCP interface
+    </pre>
+
+    <h4>Interface States</h4>
+    <pre>No interface states data</pre>
 
     <h4>Interface Configuration</h4>
-    
-        <table border="1" cellpadding="5" style="border-collapse: collapse; background: #fff; width: 100%; margin-bottom: 15px;">
-            <tr style="background: #eef;">
-                <th>Interface</th>
-                <th>Description</th>
-                <th>IP Address</th>
-                <th>Subnet Mask</th>
-            </tr>
-        
-            <tr>
-                <td>GigabitEthernet1</td>
-                <td>Managed by NetPilot Core Router Automation</td>
-                <td>192.168.56.101</td>
-                <td>255.255.255.0</td>
-            </tr>
-            </table><h4>Configured Users</h4><ul><li><b>Username:</b> cisco (Privilege Level: 15)</li></ul><h4>Static Routes</h4>
-        <table border="1" cellpadding="5" style="border-collapse: collapse; background: #fff; width: 100%; margin-bottom: 15px;">
-            <tr style="background: #eef;">
-                <th>Network Prefix</th>
-                <th>Subnet Mask</th>
-                <th>Next Hop (Gateway)</th>
-            </tr>
-        
-            <tr>
-                <td>10.10.10.0</td>
-                <td>255.255.255.0</td>
-                <td>192.168.56.1</td>
-            </tr>
-            </table>
-    <details style="margin-top: 15px;">
-        <summary style="cursor: pointer; color: #0066cc; font-weight: bold;">[+] View Raw XML Responses</summary>
-        
-        <h5>Device Facts Raw XML</h5>
-        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
-  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
-    &lt;hostname&gt;router1&lt;/hostname&gt;
-  &lt;/native&gt;
-&lt;/data&gt;</pre>
-        
-        <h5>Interface configuration Raw XML</h5>
-        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+    <pre>&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
   &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
     &lt;interface&gt;
       &lt;GigabitEthernet&gt;
@@ -168,50 +131,9 @@ root        3090  1.6  0.2  13992  9176 ?        Ss   04:48   0:00 sshd: devasc 
   &lt;/native&gt;
 &lt;/data&gt;</pre>
 
-        <h5>User configuration Raw XML</h5>
-        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
-  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
-    &lt;username&gt;
-      &lt;name&gt;cisco&lt;/name&gt;
-      &lt;privilege&gt;15&lt;/privilege&gt;
-      &lt;password&gt;
-        &lt;encryption&gt;0&lt;/encryption&gt;
-        &lt;password&gt;cisco123!&lt;/password&gt;
-      &lt;/password&gt;
-    &lt;/username&gt;
-  &lt;/native&gt;
-&lt;/data&gt;</pre>
-
-        <h5>Static routes configuration Raw XML</h5>
-        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
-  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
-    &lt;ip&gt;
-      &lt;route&gt;
-        &lt;ip-route-interface-forwarding-list&gt;
-          &lt;prefix&gt;10.10.10.0&lt;/prefix&gt;
-          &lt;mask&gt;255.255.255.0&lt;/mask&gt;
-          &lt;fwd-list&gt;
-            &lt;fwd&gt;192.168.56.1&lt;/fwd&gt;
-          &lt;/fwd-list&gt;
-        &lt;/ip-route-interface-forwarding-list&gt;
-      &lt;/route&gt;
-    &lt;/ip&gt;
-  &lt;/native&gt;
-&lt;/data&gt;</pre>
-
-        <h5>Banner configuration Raw XML</h5>
-        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
-  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
-    &lt;banner&gt;
-      &lt;motd&gt;
-        &lt;banner&gt;^C&lt;/banner&gt;
-      &lt;/motd&gt;
-    &lt;/banner&gt;
-  &lt;/native&gt;
-&lt;/data&gt;</pre>
-
-        <h5>Full Running Configuration Raw XML</h5>
-        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+    <h4>Running Configuration</h4>
+    <pre>&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
   &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
     &lt;hostname&gt;router1&lt;/hostname&gt;
     &lt;username&gt;
@@ -249,8 +171,6 @@ root        3090  1.6  0.2  13992  9176 ?        Ss   04:48   0:00 sshd: devasc 
     &lt;/ip&gt;
   &lt;/native&gt;
 &lt;/data&gt;</pre>
-    </details>
-    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
     </div><div class='section'><h2>Cisco Router Configuration Backup</h2><h3>router1</h3>
         <h4>Show Version</h4>
         <pre>Cisco IOS XE Software, Version 16.09.05

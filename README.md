@@ -1,7 +1,3 @@
-Here’s your **clean, examiner-ready, fully copy-pasteable README.md version** (I also fixed formatting issues, broken code blocks, and improved structure so it looks professional and consistent).
-
----
-
 ```md
 # NetPilot Core
 

@@ -1,24 +1,51 @@
-- name: Cisco Router Configuration Backup
-  hosts: routers
+---
+- name: Router Automation Configuration
+  hosts: cisco
   gather_facts: no
   connection: network_cli
 
   tasks:
+    - name: Configure login banner
+      cisco.ios.ios_banner:
+        banner: motd
+        text: |
+          Unauthorized access is prohibited.
+          This router is managed by NetPilot Core automation.
+        state: present
 
-    - name: Consolidate router configuration data
-      set_fact:
-        router_data:
-          hostname: "{{ inventory_hostname }}"
-          running_config: "{{ running_config.stdout[0].splitlines() }}"
-          interface_status: "{{ interface_status.stdout[0].splitlines() }}"
-          routing_table: "{{ routing_table.stdout[0].splitlines() }}"
+    - name: Configure interface description
+      cisco.ios.ios_config:
+        parents: interface GigabitEthernet1
+        lines:
+          - description Managed by NetPilot Core Router Automation
 
-    - name: Save router config as JSON
-      copy:
-        content: "{{ router_data | to_nice_json }}"
-        dest: "/app/reports/{{ inventory_hostname }}_router_backup.json"
-      delegate_to: localhost
+    - name: Configure interface IP address
+      cisco.ios.ios_config:
+        parents: interface GigabitEthernet1
+        lines:
+          - ip address 192.168.56.101 255.255.255.0    
 
-    - name: Display router data summary
+    - name: Create local user account
+      cisco.ios.ios_config:
+        lines:
+          - username netpilot privilege 15 password 0 NetPilot123! 
+
+    - name: Configure static route
+      cisco.ios.ios_config:
+        lines:
+          - ip route 10.10.10.0 255.255.255.0 192.168.56.1
+
+    - name: Retrieve router device information
+      cisco.ios.ios_command:
+        commands:
+          - show version
+          - show ip interface brief
+          - show running-config | include username
+          - show running-config | include banner
+          - show running-config | include description
+          - show running-config | include ip route
+      register: router_info
+
+    - name: Display router device information
       debug:
-        var: router_data
+        var: router_info.stdout_lines      

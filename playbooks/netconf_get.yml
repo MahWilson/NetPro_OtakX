@@ -19,7 +19,7 @@
 
     - name: "[1/4] Display device facts"
       debug:
-        msg: "{{ device_facts.output | default('No data returned') | string | truncate(3000, False, '') }}"
+        msg: "{{ device_facts.output | default('No data returned', true) | string | truncate(3000, False, '') }}"
 
     - name: "[2/4] Get interface states via NETCONF"
       ansible.netcommon.netconf_get:
@@ -39,7 +39,7 @@
 
     - name: "[2/4] Display interface states"
       debug:
-        msg: "{{ interface_states.output | default('No interface data returned') | string | truncate(3000, False, '') }}"
+        msg: "{{ interface_states.output | default('No interface data returned', true) | string | truncate(3000, False, '') }}"
 
     - name: "[3/4] Get interface configuration via NETCONF"
       ansible.netcommon.netconf_get:
@@ -65,7 +65,7 @@
 
     - name: "[3/4] Display interface configuration"
       debug:
-        msg: "{{ interface_config.output | default('No interface config returned') | string | truncate(3000, False, '') }}"
+        msg: "{{ interface_config.output | default('No interface config returned', true) | string | truncate(3000, False, '') }}"
 
     - name: "[4/4] Get full running configuration via NETCONF"
       ansible.netcommon.netconf_get:
@@ -75,7 +75,7 @@
 
     - name: "[4/4] Display running configuration (first 3000 chars)"
       debug:
-        msg: "{{ running_config.output | default('No running config returned') | string | truncate(3000, False, '') }}"
+        msg: "{{ running_config.output | default('No running config returned', true) | string | truncate(3000, False, '') }}"
 
     - name: NETCONF retrieval complete
       debug:
@@ -93,10 +93,10 @@
       set_fact:
         netconf_data:
           hostname: "{{ inventory_hostname }}"
-          device_facts: "{{ device_facts.output | default('No data returned') | string }}"
-          interface_states: "{{ interface_states.output | default('No interface data returned') | string }}"
-          interface_config: "{{ interface_config.output | default('No interface config returned') | string }}"
-          running_config: "{{ running_config.output | default('No running config returned') | string }}"
+          device_facts: "{{ device_facts.output | default('No data returned', true) | string }}"
+          interface_states: "{{ interface_states.output | default('No interface data returned', true) | string }}"
+          interface_config: "{{ interface_config.output | default('No interface config returned', true) | string }}"
+          running_config: "{{ running_config.output | default('No running config returned', true) | string }}"
 
     - name: Save NETCONF data as JSON
       copy:

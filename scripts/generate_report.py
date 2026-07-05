@@ -103,14 +103,20 @@ for report in netconf_reports:
     html += f"""
     <h3>{report.get('hostname', 'Unknown Device')}</h3>
 
-    <h4>Device Facts (Hostname / Version)</h4>
-    <pre>{safe_xml('device_facts', 'device facts')}</pre>
+    <h4>Hostname configuration</h4>
+    <pre>{safe_xml('device_facts', 'hostname')}</pre>
 
-    <h4>Interface States (Admin/Oper Status)</h4>
-    <pre>{safe_xml('interface_states', 'interface states')}</pre>
-
-    <h4>Interface Configuration (IP Addresses)</h4>
+    <h4>Interface configuration</h4>
     <pre>{safe_xml('interface_config', 'interface config')}</pre>
+
+    <h4>User configuration</h4>
+    <pre>{safe_xml('user_config', 'user config')}</pre>
+
+    <h4>Static routes configuration</h4>
+    <pre>{safe_xml('static_routes', 'static routes')}</pre>
+
+    <h4>Banner configuration</h4>
+    <pre>{safe_xml('banner_config', 'banner config')}</pre>
 
     <h4>Running Configuration</h4>
     <pre>{safe_xml('running_config', 'running config')}</pre>

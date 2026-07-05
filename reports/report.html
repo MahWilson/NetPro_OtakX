@@ -105,8 +105,7 @@ root        3090  1.6  0.2  13992  9176 ?        Ss   04:48   0:00 sshd: devasc 
             <th>Value</th>
         </tr>
         <tr><td><b>Hostname</b></td><td>router1</td></tr>
-        <tr><td><b>Banner MOTD</b></td><td><pre style="margin:0; background:none; color:#333; padding:0;">
-      </pre></td></tr>
+        <tr><td><b>Banner MOTD</b></td><td><pre style="margin:0; background:none; color:#333; padding:0;">^C</pre></td></tr>
     </table>
 
     <h4>Interface Configuration</h4>
@@ -143,113 +142,113 @@ root        3090  1.6  0.2  13992  9176 ?        Ss   04:48   0:00 sshd: devasc 
         <summary style="cursor: pointer; color: #0066cc; font-weight: bold;">[+] View Raw XML Responses</summary>
         
         <h5>Device Facts Raw XML</h5>
-        <pre><data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-    <hostname>router1</hostname>
-  </native>
-</data></pre>
+        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
+    &lt;hostname&gt;router1&lt;/hostname&gt;
+  &lt;/native&gt;
+&lt;/data&gt;</pre>
         
         <h5>Interface configuration Raw XML</h5>
-        <pre><data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-    <interface>
-      <GigabitEthernet>
-        <name>1</name>
-        <description>Managed by NetPilot Core Router Automation</description>
-        <ip>
-          <address>
-            <primary>
-              <address>192.168.56.101</address>
-              <mask>255.255.255.0</mask>
-            </primary>
-          </address>
-        </ip>
-      </GigabitEthernet>
-    </interface>
-  </native>
-</data></pre>
+        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
+    &lt;interface&gt;
+      &lt;GigabitEthernet&gt;
+        &lt;name&gt;1&lt;/name&gt;
+        &lt;description&gt;Managed by NetPilot Core Router Automation&lt;/description&gt;
+        &lt;ip&gt;
+          &lt;address&gt;
+            &lt;primary&gt;
+              &lt;address&gt;192.168.56.101&lt;/address&gt;
+              &lt;mask&gt;255.255.255.0&lt;/mask&gt;
+            &lt;/primary&gt;
+          &lt;/address&gt;
+        &lt;/ip&gt;
+      &lt;/GigabitEthernet&gt;
+    &lt;/interface&gt;
+  &lt;/native&gt;
+&lt;/data&gt;</pre>
 
         <h5>User configuration Raw XML</h5>
-        <pre><data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-    <username>
-      <name>cisco</name>
-      <privilege>15</privilege>
-      <password>
-        <encryption>0</encryption>
-        <password>cisco123!</password>
-      </password>
-    </username>
-  </native>
-</data></pre>
+        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
+    &lt;username&gt;
+      &lt;name&gt;cisco&lt;/name&gt;
+      &lt;privilege&gt;15&lt;/privilege&gt;
+      &lt;password&gt;
+        &lt;encryption&gt;0&lt;/encryption&gt;
+        &lt;password&gt;cisco123!&lt;/password&gt;
+      &lt;/password&gt;
+    &lt;/username&gt;
+  &lt;/native&gt;
+&lt;/data&gt;</pre>
 
         <h5>Static routes configuration Raw XML</h5>
-        <pre><data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-    <ip>
-      <route>
-        <ip-route-interface-forwarding-list>
-          <prefix>10.10.10.0</prefix>
-          <mask>255.255.255.0</mask>
-          <fwd-list>
-            <fwd>192.168.56.1</fwd>
-          </fwd-list>
-        </ip-route-interface-forwarding-list>
-      </route>
-    </ip>
-  </native>
-</data></pre>
+        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
+    &lt;ip&gt;
+      &lt;route&gt;
+        &lt;ip-route-interface-forwarding-list&gt;
+          &lt;prefix&gt;10.10.10.0&lt;/prefix&gt;
+          &lt;mask&gt;255.255.255.0&lt;/mask&gt;
+          &lt;fwd-list&gt;
+            &lt;fwd&gt;192.168.56.1&lt;/fwd&gt;
+          &lt;/fwd-list&gt;
+        &lt;/ip-route-interface-forwarding-list&gt;
+      &lt;/route&gt;
+    &lt;/ip&gt;
+  &lt;/native&gt;
+&lt;/data&gt;</pre>
 
         <h5>Banner configuration Raw XML</h5>
-        <pre><data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-    <banner>
-      <motd>
-        <banner>^C</banner>
-      </motd>
-    </banner>
-  </native>
-</data></pre>
+        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
+    &lt;banner&gt;
+      &lt;motd&gt;
+        &lt;banner&gt;^C&lt;/banner&gt;
+      &lt;/motd&gt;
+    &lt;/banner&gt;
+  &lt;/native&gt;
+&lt;/data&gt;</pre>
 
         <h5>Full Running Configuration Raw XML</h5>
-        <pre><data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-    <hostname>router1</hostname>
-    <username>
-      <name>cisco</name>
-      <privilege>15</privilege>
-      <password>
-        <encryption>0</encryption>
-        <password>cisco123!</password>
-      </password>
-    </username>
-    <interface>
-      <GigabitEthernet>
-        <name>1</name>
-        <description>Managed by NetPilot Core Router Automation</description>
-        <ip>
-          <address>
-            <primary>
-              <address>192.168.56.101</address>
-              <mask>255.255.255.0</mask>
-            </primary>
-          </address>
-        </ip>
-      </GigabitEthernet>
-    </interface>
-    <ip>
-      <route>
-        <ip-route-interface-forwarding-list>
-          <prefix>10.10.10.0</prefix>
-          <mask>255.255.255.0</mask>
-          <fwd-list>
-            <fwd>192.168.56.1</fwd>
-          </fwd-list>
-        </ip-route-interface-forwarding-list>
-      </route>
-    </ip>
-  </native>
-</data></pre>
+        <pre>&lt;data xmlns=&quot;urn:ietf:params:xml:ns:netconf:base:1.0&quot;&gt;
+  &lt;native xmlns=&quot;http://cisco.com/ns/yang/Cisco-IOS-XE-native&quot;&gt;
+    &lt;hostname&gt;router1&lt;/hostname&gt;
+    &lt;username&gt;
+      &lt;name&gt;cisco&lt;/name&gt;
+      &lt;privilege&gt;15&lt;/privilege&gt;
+      &lt;password&gt;
+        &lt;encryption&gt;0&lt;/encryption&gt;
+        &lt;password&gt;cisco123!&lt;/password&gt;
+      &lt;/password&gt;
+    &lt;/username&gt;
+    &lt;interface&gt;
+      &lt;GigabitEthernet&gt;
+        &lt;name&gt;1&lt;/name&gt;
+        &lt;description&gt;Managed by NetPilot Core Router Automation&lt;/description&gt;
+        &lt;ip&gt;
+          &lt;address&gt;
+            &lt;primary&gt;
+              &lt;address&gt;192.168.56.101&lt;/address&gt;
+              &lt;mask&gt;255.255.255.0&lt;/mask&gt;
+            &lt;/primary&gt;
+          &lt;/address&gt;
+        &lt;/ip&gt;
+      &lt;/GigabitEthernet&gt;
+    &lt;/interface&gt;
+    &lt;ip&gt;
+      &lt;route&gt;
+        &lt;ip-route-interface-forwarding-list&gt;
+          &lt;prefix&gt;10.10.10.0&lt;/prefix&gt;
+          &lt;mask&gt;255.255.255.0&lt;/mask&gt;
+          &lt;fwd-list&gt;
+            &lt;fwd&gt;192.168.56.1&lt;/fwd&gt;
+          &lt;/fwd-list&gt;
+        &lt;/ip-route-interface-forwarding-list&gt;
+      &lt;/route&gt;
+    &lt;/ip&gt;
+  &lt;/native&gt;
+&lt;/data&gt;</pre>
     </details>
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
     </div><div class='section'><h2>Cisco Router Configuration Backup</h2><h3>router1</h3>

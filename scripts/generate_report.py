@@ -1,6 +1,7 @@
 import json
 import glob
 from pathlib import Path
+import html as html_esc
 
 REPORT_DIR = Path(__file__).resolve().parent.parent / "reports"
 OUTPUT_FILE = REPORT_DIR / "report.html"
@@ -143,10 +144,17 @@ for report in netconf_reports:
                 mask = ""
                 ip_el = intf_type_node.find('.//ip/address/primary/address')
                 mask_el = intf_type_node.find('.//ip/address/primary/mask')
-                if ip_el is not None:
+                dhcp_el = intf_type_node.find('.//ip/address/dhcp')
+                
+                if ip_el is not None and ip_el.text:
                     ip = ip_el.text
-                if mask_el is not None:
+                elif dhcp_el is not None:
+                    ip = "DHCP"
+                
+                if mask_el is not None and mask_el.text:
                     mask = mask_el.text
+                elif dhcp_el is not None:
+                    mask = "DHCP (255.255.255.255)"
                 
                 interfaces.append({
                     "name": f"{type_name}{name}",
@@ -183,9 +191,13 @@ for report in netconf_reports:
     # 5. Parse Banner (fall back to banner_config)
     banner_xml = config_xml if config_xml is not None and config_xml.find('.//banner') is not None else safe_parse_xml(report.get('banner_config'))
     if banner_xml is not None:
-        b_el = banner_xml.find('.//banner')
-        if b_el is not None and b_el.text:
-            banner = b_el.text
+        motd_banner = banner_xml.find('.//motd/banner')
+        if motd_banner is not None and motd_banner.text:
+            banner = motd_banner.text
+        else:
+            b_el = banner_xml.find('.//banner')
+            if b_el is not None and b_el.text:
+                banner = b_el.text
 
     # Render structured HTML layout
     html += f"""
@@ -262,22 +274,22 @@ for report in netconf_reports:
         <summary style="cursor: pointer; color: #0066cc; font-weight: bold;">[+] View Raw XML Responses</summary>
         
         <h5>Device Facts Raw XML</h5>
-        <pre>{str(report.get('device_facts', ''))[:2000]}</pre>
+        <pre>{html_esc.escape(str(report.get('device_facts', ''))[:2000])}</pre>
         
         <h5>Interface configuration Raw XML</h5>
-        <pre>{str(report.get('interface_config', ''))[:2000]}</pre>
+        <pre>{html_esc.escape(str(report.get('interface_config', ''))[:2000])}</pre>
 
         <h5>User configuration Raw XML</h5>
-        <pre>{str(report.get('user_config', ''))[:2000]}</pre>
+        <pre>{html_esc.escape(str(report.get('user_config', ''))[:2000])}</pre>
 
         <h5>Static routes configuration Raw XML</h5>
-        <pre>{str(report.get('static_routes', ''))[:2000]}</pre>
+        <pre>{html_esc.escape(str(report.get('static_routes', ''))[:2000])}</pre>
 
         <h5>Banner configuration Raw XML</h5>
-        <pre>{str(report.get('banner_config', ''))[:2000]}</pre>
+        <pre>{html_esc.escape(str(report.get('banner_config', ''))[:2000])}</pre>
 
         <h5>Full Running Configuration Raw XML</h5>
-        <pre>{str(report.get('running_config', ''))[:3000]}</pre>
+        <pre>{html_esc.escape(str(report.get('running_config', ''))[:3000])}</pre>
     </details>
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
     """

@@ -1,40 +1,40 @@
+---
 - name: Linux System Audit
   hosts: linux
   gather_facts: yes
-
   tasks:
     - name: Get current date and time
-      command: date
+      ansible.builtin.command: date
       register: current_datetime
       changed_when: false
 
     - name: Get CPU info
-      set_fact:
+      ansible.builtin.set_fact:
         cpu_model: "{{ ansible_processor[2] | default(ansible_processor[0]) }}"
         cpu_cores: "{{ ansible_processor_vcpus }}"
 
     - name: Get memory usage
-      command: free -h
+      ansible.builtin.command: free -h
       register: memory_usage
       changed_when: false
 
     - name: Get disk usage
-      command: df -h
+      ansible.builtin.command: df -h
       register: disk_usage
       changed_when: false
 
     - name: Get logged-in users
-      command: who
+      ansible.builtin.command: who
       register: logged_in_users
       changed_when: false
 
-    - name: Get top processes by CPU
-      shell: ps aux --sort=-%cpu | head -n 6
+    - name: Get top 5 processes by CPU
+      ansible.builtin.shell: ps aux --sort=-%cpu | head -n 6
       register: top_processes
       changed_when: false
 
-    - name: Consolidate audit data
-      set_fact:
+    - name: Consolidate all audit data into JSON
+      ansible.builtin.set_fact:
         audit_data:
           hostname: "{{ ansible_hostname }}"
           datetime: "{{ current_datetime.stdout }}"
@@ -51,6 +51,32 @@
         dest: "/app/reports/{{ ansible_hostname }}_audit.json"
       delegate_to: localhost
 
-    - name: Display audit data
-      debug:
-        var: audit_data
+    - name: Save audit data as JSON
+      ansible.builtin.copy:
+        content: "{{ audit_data | to_nice_json }}"
+        dest: "/app/reports/{{ ansible_hostname }}_audit.json"
+      delegate_to: localhost
+
+    - name: Print Audit Report
+      ansible.builtin.debug:
+        msg:
+          - "========== AUDIT REPORT =========="
+          - "Hostname    : {{ ansible_hostname }}"
+          - "Date/Time   : {{ current_datetime.stdout }}"
+          - "CPU Model   : {{ cpu_model }}"
+          - "CPU Cores   : {{ cpu_cores }}"
+          - ""
+          - "--- Memory ---"
+          - "{{ memory_usage.stdout_lines | join('\n') }}"
+          - ""
+          - "--- Disk ---"
+          - "{{ disk_usage.stdout_lines | join('\n') }}"
+          - ""
+          - "--- Logged In Users ---"
+          - "{{ logged_in_users.stdout_lines | join('\n') }}"
+          - ""
+          - "--- Top 5 Processes ---"
+          - "{{ top_processes.stdout_lines | join('\n') }}"
+          - ""
+          - "JSON saved to: /app/reports/{{ ansible_hostname }}_audit.json"
+          - "=================================="

@@ -117,15 +117,18 @@ for report in netconf_reports:
         except Exception:
             return None
 
-    # 1. Parse Hostname
-    host_xml = safe_parse_xml(report.get('device_facts'))
+    # 1. Load primary XML config source
+    config_xml = safe_parse_xml(report.get('running_config'))
+
+    # Hostname (fall back to device_facts)
+    host_xml = config_xml if config_xml is not None and config_xml.find('.//hostname') is not None else safe_parse_xml(report.get('device_facts'))
     if host_xml is not None:
         host_el = host_xml.find('.//hostname')
         if host_el is not None and host_el.text:
             hostname = host_el.text
 
-    # 2. Parse Interfaces
-    intf_xml = safe_parse_xml(report.get('interface_config'))
+    # 2. Parse Interfaces (fall back to interface_config)
+    intf_xml = config_xml if config_xml is not None and config_xml.find('.//interface') is not None else safe_parse_xml(report.get('interface_config'))
     if intf_xml is not None:
         interface_node = intf_xml.find('.//interface')
         if interface_node is not None:
@@ -152,8 +155,8 @@ for report in netconf_reports:
                     "mask": mask
                 })
 
-    # 3. Parse Users
-    user_xml = safe_parse_xml(report.get('user_config'))
+    # 3. Parse Users (fall back to user_config)
+    user_xml = config_xml if config_xml is not None and config_xml.find('.//username') is not None else safe_parse_xml(report.get('user_config'))
     if user_xml is not None:
         for u_node in user_xml.findall('.//username'):
             u_name = u_node.find('name')
@@ -164,8 +167,8 @@ for report in netconf_reports:
                     "privilege": u_priv.text if u_priv is not None else "N/A"
                 })
 
-    # 4. Parse Static Routes
-    routes_xml = safe_parse_xml(report.get('static_routes'))
+    # 4. Parse Static Routes (fall back to static_routes)
+    routes_xml = config_xml if config_xml is not None and config_xml.find('.//ip-route-interface-forwarding-list') is not None else safe_parse_xml(report.get('static_routes'))
     if routes_xml is not None:
         for r_node in routes_xml.findall('.//ip-route-interface-forwarding-list'):
             prefix = r_node.find('prefix')
@@ -177,8 +180,8 @@ for report in netconf_reports:
                 "gateway": fwd.text if fwd is not None else ""
             })
 
-    # 5. Parse Banner
-    banner_xml = safe_parse_xml(report.get('banner_config'))
+    # 5. Parse Banner (fall back to banner_config)
+    banner_xml = config_xml if config_xml is not None and config_xml.find('.//banner') is not None else safe_parse_xml(report.get('banner_config'))
     if banner_xml is not None:
         b_el = banner_xml.find('.//banner')
         if b_el is not None and b_el.text:

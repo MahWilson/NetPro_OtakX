@@ -20,7 +20,7 @@ def load_json_files(pattern):
 # Load report data
 linux_reports = load_json_files("*_audit.json")
 netconf_reports = load_json_files("*_netconf.json")
-router_reports = load_json_files("*_router_backup.json")
+router_reports = load_json_files("*_config.json")
 
 
 html = """
@@ -110,9 +110,7 @@ html += "</div>"
 html += "<div class='section'><h2>Cisco Router Configuration Backup</h2>"
 
 for report in router_reports:
-    html += f"""
-    <h3>{report.get('hostname')}</h3>
-    """
+    html += f"<h3>{report.get('hostname')}</h3>"
 
     router_info = report.get('router_info', [])
 
@@ -128,8 +126,9 @@ for report in router_reports:
     for i, output in enumerate(router_info):
         title = titles[i] if i < len(titles) else f"Command {i+1}"
 
+        # FIX: flatten safely
         if isinstance(output, list):
-            content = "\n".join(output)
+            content = "\n".join(str(x) for x in output)
         else:
             content = str(output)
 

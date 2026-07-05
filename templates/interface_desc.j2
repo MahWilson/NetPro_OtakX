@@ -1,12 +1,16 @@
 {% for intf in netpilot_interfaces %}
 interface {{ intf.name }}
  description {{ intf.description }}
- {% if intf.ip_address is defined and intf.ip_address and intf.subnet_mask is defined and intf.subnet_mask %}
+
+{% if intf.ip_address is defined and intf.subnet_mask is defined %}
  ip address {{ intf.ip_address }} {{ intf.subnet_mask }}
- {% endif %}
- {% if intf.enabled %}
+{% endif %}
+
+{% if intf.enabled | default(true) %}
  no shutdown
- {% else %}
+{% else %}
  shutdown
- {% endif %}
+{% endif %}
+
+!
 {% endfor %}

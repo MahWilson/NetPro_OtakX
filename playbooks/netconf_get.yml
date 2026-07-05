@@ -1,13 +1,23 @@
-- name: NETCONF Device Facts Test
-  hosts: cisco
+- name: NETCONF Device Data Collection
+  hosts: routers
   gather_facts: no
+  connection: netconf
 
   tasks:
-    - name: Get interface configuration via NETCONF
-      netconf_get:
-        filter: <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces"/>
-      register: netconf_output
 
-    - name: Print NETCONF output
+    - name: Consolidate NETCONF data
+      set_fact:
+        netconf_data:
+          hostname: "{{ inventory_hostname }}"
+          interfaces: "{{ netconf_interfaces.stdout | default(netconf_interfaces) }}"
+          system: "{{ netconf_system.stdout | default(netconf_system) }}"
+
+    - name: Save NETCONF data as JSON
+      copy:
+        content: "{{ netconf_data | to_nice_json }}"
+        dest: "/app/reports/{{ inventory_hostname }}_netconf.json"
+      delegate_to: localhost
+
+    - name: Display NETCONF data
       debug:
-        var: netconf_output
+        var: netconf_data

@@ -307,13 +307,38 @@ ansible cisco -i inventory/routers.ini -m cisco.ios.ios_facts
 
 # Run Playbooks
 
-## Router config
+## Router Automation
 
-Run:
+The router automation module is implemented in:
 
 ```bash
-ansible-playbook playbooks/router_config.yml -i inventory/routers.ini
-```
+playbooks/router_config.yml
+
+This playbook automates Cisco CSR1kv router configuration using Ansible. It includes:
+
+Login banner configuration
+Interface description configuration
+Interface IP address configuration
+Local user account creation
+Static route configuration
+Router device information retrieval for verification
+
+Before running the playbook, enter the Dockerized Ansible controller:
+
+docker exec -it netpilot-controller bash
+
+Set the Ansible SSH options:
+
+export ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD=True
+
+Run the router automation playbook:
+
+ansible-playbook -i inventory/routers.ini playbooks/router_config.yml
+
+The playbook should complete successfully with no failed tasks:
+
+failed=0
 
 ---
 

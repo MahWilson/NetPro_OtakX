@@ -63,3 +63,29 @@ html = """
 """
 
 
+# Linux Audit Section
+html += "<div class='section'><h2>Linux System Audit</h2>"
+
+for report in linux_reports:
+    html += f"""
+    <h3>{report.get('hostname')}</h3>
+    <p><b>Date:</b> {report.get('datetime')}</p>
+    <p><b>CPU:</b> {report.get('cpu_model')}</p>
+    <p><b>Cores:</b> {report.get('cpu_cores')}</p>
+
+    <h4>Memory</h4>
+    <pre>{"\n".join(report.get('memory', []))}</pre>
+
+    <h4>Disk</h4>
+    <pre>{"\n".join(report.get('disk', []))}</pre>
+
+    <h4>Logged-in Users</h4>
+    <pre>{"\n".join(report.get('logged_in_users', []))}</pre>
+
+    <h4>Top Processes</h4>
+    <pre>{"\n".join(report.get('top_processes', []))}</pre>
+    """
+
+html += "</div>"
+
+

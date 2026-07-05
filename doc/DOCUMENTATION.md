@@ -1,46 +1,42 @@
 # NetPilot Core – Development Documentation
 
-> **Project Status:** 🚧 In Development
+> **Project Status:** 🚧 In Active Development
 >
-> This document serves as the living technical documentation for the NetPilot Core project.
-> It should be updated whenever significant architectural, implementation, or deployment changes are made.
+> This document serves as the technical documentation for the NetPilot Core project. It records the project's architecture, development environment, implementation progress, testing workflow, known issues, and future roadmap. All contributors should update this document whenever significant changes are made.
 
 ---
 
 # Project Overview
 
 ## Project Name
-NetPilot Core
+
+**NetPilot Core**
 
 ## Description
 
-NetPilot Core is an AI-assisted network automation platform designed to simplify network management using automation tools such as Ansible, NETCONF, SSH, and future AI-assisted validation.
+NetPilot Core is a lightweight network automation platform developed for managing Cisco IOS XE routers and Linux servers using Infrastructure as Code (IaC) principles. The project leverages Docker to standardize the development environment and Ansible to automate network configuration, Linux auditing, and NETCONF-based data retrieval.
 
-The project aims to provide a modular platform capable of:
-
-- Automated device configuration
-- Network auditing
-- Configuration backup
-- Configuration validation
-- Future AI-assisted explanation and analysis
-- Support for Cisco IOS devices and Linux servers
+The project is designed with a modular architecture so that additional capabilities, such as AI-assisted configuration validation, natural language explanations, and REST API integration, can be incorporated in future iterations.
 
 ---
 
-# Objectives
+# Project Objectives
 
-Current MVP objectives:
+Current MVP Objectives
 
-- [ ] Deploy development environment using Docker
-- [ ] Establish Ansible controller
-- [ ] Connect to Cisco CSR1000v
-- [ ] Connect to Linux VM
-- [ ] Execute Ansible playbooks
-- [ ] Perform configuration backup
-- [ ] Perform Linux audit
-- [ ] Integrate NETCONF
-- [ ] Integration & Iterative Testing
-- [ ] Final Version Testing
+* ✅ Standardize development environment using Docker
+* ✅ Configure GitHub repository and branching workflow
+* ✅ Build modular project structure
+* ✅ Configure Ansible controller
+* ✅ Connect to Cisco CSR1000v through SSH
+* ✅ Connect to Linux VM through SSH
+* ✅ Execute Router Automation playbook
+* ✅ Execute Linux Audit playbook
+* 🚧 Complete NETCONF integration
+* 🚧 Generate JSON reports automatically
+* 🚧 Generate consolidated analysis reports
+* 🚧 Integration and iterative testing
+* ⏳ Frontend and Backend integration
 
 ---
 
@@ -48,46 +44,81 @@ Current MVP objectives:
 
 ```
 netpilot-core/
-
-docker/
-inventory/
-playbooks/
-roles/
-scripts/
-ansible/
-docs/
+│
+├── docker/
+│   └── Dockerfile
+│
+├── inventory/
+│   ├── routers.ini
+│   ├── linux.ini
+│   └── netconf.ini
+│
+├── playbooks/
+│   ├── router_config.yml
+│   ├── linux_audit.yml
+│   └── netconf_get.yml
+│
+├── templates/
+│   ├── banner.j2
+│   └── interface_desc.j2
+│
+├── reports/
+│   ├── router/
+│   ├── linux/
+│   └── netconf/
+│
+├── scripts/
+│   ├── setup.sh
+│   └── generate_report.py
+│
+├── docs/
+│
+├── requirements.yml
+│
+├── docker-compose.yml
+│
+└── README.md
 ```
 
 ---
 
-# Current Technology Stack
+# Technology Stack
 
-| Component | Technology |
-|------------|------------|
-| Automation | Ansible |
-| Network | Cisco IOS XE |
-| Protocol | SSH |
-| Future Protocol | NETCONF |
-| Containerization | Docker |
-| Version Control | GitHub |
+| Component            | Technology     |
+| -------------------- | -------------- |
+| Programming Language | Python 3.8     |
+| Automation           | Ansible 2.9.9  |
+| Containerization     | Docker         |
+| Version Control      | Git + GitHub   |
+| Network Device       | Cisco CSR1000v |
+| Network Protocol     | SSH            |
+| Network Management   | NETCONF        |
+| Linux Management     | SSH            |
+| Template Engine      | Jinja2         |
+| SSH Library          | Paramiko       |
+| NETCONF Library      | ncclient       |
+| Reporting            | JSON           |
+| Report Generator     | Python         |
 
 ---
 
 # Development Environment
 
-## Host OS
+## Host Machine
 
 Windows 11
 
-## Docker
+## Development Platform
 
-Container Name
+Docker Desktop
+
+## Container
 
 ```
 netpilot-controller
 ```
 
-Working directory
+Working Directory
 
 ```
 /app
@@ -114,7 +145,13 @@ Ansible
 Device
 
 ```
-CSR1000v
+Cisco CSR1000v
+```
+
+Operating System
+
+```
+IOS XE 16.09.05
 ```
 
 Management IP
@@ -123,30 +160,61 @@ Management IP
 192.168.56.101
 ```
 
-Transport
+Connection
 
 ```
-SSH
+SSH (Port 22)
+```
+
+NETCONF
+
+```
+Port 830
 ```
 
 ---
 
 ## Linux Server
 
-(To be completed)
+Management Method
+
+```
+SSH
+```
+
+Purpose
+
+* Linux auditing
+* System information collection
+* Security validation
 
 ---
 
-# Inventory Structure
+# Inventory Files
 
-Current inventory:
+Current inventories
 
 ```
 inventory/
 
 routers.ini
 linux.ini
+netconf.ini
 ```
+
+Purpose
+
+**routers.ini**
+
+* Router automation
+
+**linux.ini**
+
+* Linux audit
+
+**netconf.ini**
+
+* NETCONF communication
 
 ---
 
@@ -154,18 +222,21 @@ linux.ini
 
 ## router_config.yml
 
-Purpose
+### Purpose
 
-- Verify router connectivity
-- Execute show commands
-- Validate automation pipeline
+Automates Cisco router configuration through SSH.
 
-Current functionality
+### Current Features
 
-- show version
-- show ip interface brief
+* Configure login banner
+* Configure interface description
+* Verify connectivity
+* Execute CLI commands
+* Save running configuration
+* Export command output
+* Generate JSON report
 
-Status
+### Status
 
 ✅ Working
 
@@ -173,31 +244,208 @@ Status
 
 ## linux_audit.yml
 
+### Purpose
+
+Collects Linux system information for auditing.
+
+### Current Features
+
+* Hostname
+* Operating System
+* Kernel Version
+* CPU Information
+* Memory Information
+* Disk Usage
+* Network Interfaces
+* Logged-in Users
+* Running Services
+* Generate JSON report
+
+### Status
+
+✅ Working
+
+---
+
+## netconf_get.yml
+
+### Purpose
+
+Retrieve device information using NETCONF.
+
+### Current Features
+
+* Device Information
+* Interface States
+* Interface Configuration
+* Running Configuration
+* Generate JSON report
+
+### Status
+
+🚧 Currently under compatibility testing
+
+Known issue involves Ansible 2.9 compatibility with modern NETCONF collections.
+
+---
+
+# Templates
+
+Current Jinja2 templates
+
+```
+templates/
+
+banner.j2
+interface_desc.j2
+```
+
 Purpose
 
-Perform basic Linux auditing.
+### banner.j2
 
-Status
+Generates standard login banner.
 
-🚧 In Progress
+### interface_desc.j2
+
+Generates interface descriptions dynamically.
+
+---
+
+# Report Generation
+
+Each playbook exports structured JSON output.
+
+```
+reports/
+
+router/
+linux/
+netconf/
+```
+
+A Python reporting script aggregates these reports.
+
+```
+python3 scripts/generate_report.py
+```
+
+Future enhancement
+
+* HTML report
+* Dashboard
+* Charts
+* Historical comparison
 
 ---
 
 # Docker Environment
 
-Status
+Purpose
 
-✅ Running
+Provide identical development environments across all team members.
 
-Current Image
+Benefits
 
-(To be updated)
+* Consistent Python versions
+* Consistent Ansible version
+* Consistent dependencies
+* Eliminates "works on my machine" issues
 
 Container
 
 ```
 netpilot-controller
 ```
+
+Build
+
+```
+docker compose build
+```
+
+Run
+
+```
+docker compose up -d
+```
+
+Enter Container
+
+```
+docker exec -it netpilot-controller bash
+```
+
+---
+
+# Testing Workflow
+
+## Initial Setup
+
+```
+git clone https://github.com/MahWilson/NetPro_OtakX.git
+
+cd NetPro_OtakX
+
+docker compose build
+
+docker compose up -d
+
+docker exec -it netpilot-controller bash
+```
+
+Disable Host Key Checking
+
+```
+export ANSIBLE_HOST_KEY_CHECKING=False
+```
+
+Execute Playbooks
+
+```
+ansible-playbook -i inventory/routers.ini playbooks/router_config.yml
+
+ansible-playbook -i inventory/linux.ini playbooks/linux_audit.yml
+
+ansible-playbook -i inventory/netconf.ini playbooks/netconf_get.yml
+```
+
+Generate Report
+
+```
+python3 scripts/generate_report.py
+```
+
+---
+
+# Git Workflow
+
+The project follows a Git Flow-inspired workflow.
+
+```
+main
+│
+└── development
+      │
+      ├── feature/router
+      ├── feature/linux
+      ├── feature/netconf
+      ├── feature/backend
+      └── feature/frontend
+```
+
+Development Process
+
+1. Create feature branch
+2. Implement feature
+3. Commit changes
+4. Push feature branch
+5. Open Pull Request
+6. Review changes
+7. Resolve merge conflicts if necessary
+8. Merge into development
+9. Perform integration testing
+10. Merge development into main after successful validation
 
 ---
 
@@ -207,30 +455,25 @@ netpilot-controller
 
 Issue
 
-Paramiko blocks first-time SSH connection because the CSR1000v host key is unknown.
+Unknown SSH host key prevents initial connection.
 
-Temporary Fix
+Temporary Solution
 
-```bash
-export ANSIBLE_HOST_KEY_CHECKING=False
-export ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD=True
 ```
-
-Future Improvement
-
-Configure Docker image to automatically trust lab devices.
+export ANSIBLE_HOST_KEY_CHECKING=False
+```
 
 Status
 
-Resolved
+✅ Resolved
 
 ---
 
-## Legacy Cisco SSH Algorithms
+## Legacy SSH Algorithms
 
-Cisco CSR1000v supports legacy key exchange algorithms.
+Cisco CSR1000v uses legacy cryptographic algorithms.
 
-Current workaround
+Workaround
 
 ```
 diffie-hellman-group14-sha1
@@ -238,11 +481,34 @@ diffie-hellman-group14-sha1
 
 Status
 
-Resolved
+✅ Resolved
 
 ---
 
-## Jinja2 Warning
+## NETCONF Compatibility
+
+Current Issue
+
+Ansible 2.9.9 is incompatible with the latest Galaxy collections, causing errors such as:
+
+```
+known_hosts_lookup is not defined
+```
+
+Current Status
+
+🚧 Under investigation
+
+Planned Solution
+
+* Pin compatible collection versions
+* Maintain compatibility with Cisco NetAcad lab environment
+
+---
+
+## Jinja2 Compatibility Warning
+
+Issue
 
 ```
 environmentfilter
@@ -250,7 +516,7 @@ environmentfilter
 
 Cause
 
-Old Ansible with newer Jinja2.
+Older Ansible version with newer Jinja2.
 
 Impact
 
@@ -262,64 +528,94 @@ Low Priority
 
 ---
 
-# Decisions Log
+# Architecture Decisions
 
 ## Decision 001
 
-Docker will be used to standardize the development environment.
+Docker will be used as the standard development environment.
 
 Reason
 
-Ensure all developers use identical tooling.
+Ensures every team member uses identical tooling and dependencies.
 
 ---
 
 ## Decision 002
 
-Ansible 2.9 will be maintained for compatibility with Cisco NetAcad labs.
+Ansible 2.9.9 will remain the primary automation engine.
 
 Reason
 
-Avoid compatibility issues with CSR1000v automation.
+Required for compatibility with Cisco NetAcad labs.
 
 ---
 
-# Development Progress
+## Decision 003
 
-| Module | Status |
-|----------|---------|
-| Docker | ✅ |
-| GitHub | ✅ |
-| Project Structure | ✅ |
-| Router Inventory | ✅ |
-| Router SSH | ✅ |
-| Router Automation | ✅ |
-| Linux Inventory | 🚧 |
-| Linux Audit | 🚧 |
-| NETCONF | ⏳ |
+JSON will be the standard reporting format.
+
+Reason
+
+Machine-readable, lightweight, and easily processed for analytics and dashboards.
+
+---
+
+## Decision 004
+
+All automation will be implemented as modular playbooks.
+
+Reason
+
+Simplifies testing, maintenance, and future feature expansion.
+
+---
+
+# Current Development Progress
+
+| Module                  | Status                   |
+| ----------------------- | ------------------------ |
+| GitHub Repository       | ✅ Completed              |
+| Git Workflow            | ✅ Completed              |
+| Docker Environment      | ✅ Completed              |
+| Docker Compose          | ✅ Completed              |
+| Project Structure       | ✅ Completed              |
+| Router Inventory        | ✅ Completed              |
+| Linux Inventory         | ✅ Completed              |
+| NETCONF Inventory       | ✅ Completed              |
+| Router Automation       | ✅ Completed              |
+| Linux Audit             | ✅ Completed              |
+| Jinja Templates         | ✅ Completed              |
+| JSON Report Generation  | ✅ Completed              |
+| Python Report Generator | ✅ Completed              |
+| NETCONF Playbook        | 🚧 Compatibility Testing |
+| Backend API             | ⏳ Planned                |
+| Frontend Dashboard      | ⏳ Planned                |
+| AI Validation           | ⏳ Future Work            |
 
 ---
 
 # Team Responsibilities
 
-| Member | Responsibility | Status |
-|----------|----------------|---------|
-| Project Lead | Docker, Architecture, Integration | In Progress |
-| Member 2 | Router Automation | |
-| Member 3 | Linux Automation | |
-| Member 4 | Backend API | |
-| Member 5 | Frontend UI | |
+| Member       | Responsibility                                     |
+| ------------ | -------------------------------------------------- |
+| Project Lead | Architecture, Docker, GitHub, Integration, Testing |
+| Member 2     | Router Automation                                  |
+| Member 3     | Linux Automation                                   |
+| Member 4     | Backend API Development                            |
+| Member 5     | Frontend Dashboard                                 |
 
 ---
 
-# Current Milestone
+# Milestone 1 (Completed)
 
-Milestone 1
-
-- Docker operational
-- GitHub repository created
-- Router connectivity established
-- Initial playbooks functional
+* Docker environment established
+* GitHub repository configured
+* Branching strategy implemented
+* Router connectivity verified
+* Linux connectivity verified
+* Router automation operational
+* Linux audit operational
+* JSON report generation implemented
 
 Status
 
@@ -327,24 +623,66 @@ Status
 
 ---
 
-# Next Milestone
+# Milestone 2 (Current)
 
-- Linux automation
-- NETCONF integration
-- Configuration backup
-- Backend API
+* Complete NETCONF compatibility
+* Consolidate report generation
+* Backend API development
+* Integration testing
+* Pull Request validation
+
+Status
+
+🚧 In Progress
+
+---
+
+# Milestone 3 (Future)
+
+* REST API
+* React Dashboard
+* AI-assisted configuration validation
+* AI explanation engine
+* Configuration compliance checking
+* Historical report comparison
+
+---
+
+# Future Enhancements
+
+Planned features include:
+
+* AI-powered configuration validation
+* Natural language explanation of configuration changes
+* Network compliance checking
+* Configuration rollback
+* Configuration diff viewer
+* Multi-router automation
+* Role-Based Access Control (RBAC)
+* Dashboard visualization
+* REST API
+* Real-time monitoring
+* Configuration backup scheduling
 
 ---
 
 # Change Log
 
-## YYYY-MM-DD
+## 2026-07
 
-- Initial documentation created.
+* Dockerized development environment
+* Implemented Git branching workflow
+* Completed router automation playbook
+* Completed Linux audit playbook
+* Added Jinja2 templates
+* Added JSON report generation
+* Implemented automated report generation script
+* Added NETCONF playbook (compatibility testing)
+* Improved repository structure
+* Standardized testing workflow
 
 ---
 
 # Notes
 
-This document is intended to evolve throughout the project lifecycle.
-All contributors are encouraged to update it whenever significant changes are made.
+This project is developed as part of a university network automation assignment while following software engineering best practices such as Infrastructure as Code (IaC), containerized development, version control with feature branching, modular playbook design, and iterative integration testing. The architecture is intentionally modular to support future enhancements, including backend APIs, web dashboards, and AI-assisted network automation capabilities.

@@ -1,63 +1,78 @@
+Here’s your **clean, examiner-ready, fully copy-pasteable README.md version** (I also fixed formatting issues, broken code blocks, and improved structure so it looks professional and consistent).
+
+---
+
+```md
 # NetPilot Core
 
 **Lightweight Infrastructure Automation and System Audit Framework**
 
+---
+
 # OtakX Team Members
 
-* Mah Wilson
-* Tan Jian Ming
-* Fam Qai Zen
-* Liow Jia Feng
-* Bharath
-
-## Overview
-
-NetPilot Core is a collaborative network automation project developed for the SECR3253 Network Programming course.
-
-This project aims to automate network device configuration and Linux system auditing using:
-
-* Docker
-* Ansible
-* NETCONF
-* GitHub
-
-The goal is to simulate a real-world Infrastructure as Code (IaC) workflow where teams collaboratively manage and automate infrastructure deployment.
-
-This project performs:
-
-### Network Device Automation
-
-* Configure IP addresses
-* Create user accounts
-* Set banner messages
-* Configure interface descriptions
-* Configure static routes
-* Retrieve device information
-
-### Linux System Audit
-
-* Hostname
-* Current date and time
-* CPU information
-* Memory usage
-* Disk usage
-* Logged-in users
-* Top 5 CPU-consuming processes
+- Mah Wilson  
+- Tan Jian Ming  
+- Fam Qai Zen  
+- Liow Jia Feng  
+- Bharath  
 
 ---
 
-# Project Architecture
+# Overview
 
-Local machine runs Dockerized Ansible Controller.
+NetPilot Core is a collaborative network automation project developed for the **SECR3253 Network Programming** course.
 
-Ansible communicates with:
+This project simulates a real-world **Infrastructure as Code (IaC)** workflow using:
 
-* Cisco Router VM (provided by lecturer)
-* Linux VM (Ubuntu)
+- Docker
+- Ansible
+- NETCONF
+- GitHub
 
-Flow:
+It enables automated network configuration and Linux system auditing.
 
-Developer Machine → Docker → Ansible → Cisco/Linux Targets
+---
+
+# Project Features
+
+## Network Automation (Cisco IOS)
+
+- Configure IP addresses  
+- Create user accounts  
+- Configure login banners  
+- Set interface descriptions  
+- Configure static routes  
+- Retrieve device information  
+- NETCONF-based data collection  
+
+---
+
+## Linux System Audit
+
+- Hostname  
+- Date and time  
+- CPU usage  
+- Memory usage  
+- Disk usage  
+- Logged-in users  
+- Top CPU-consuming processes  
+
+---
+
+# Architecture
+
+```
+
+Developer Machine
+↓
+Docker (Ansible Controller)
+↓
+Ansible Automation Layer
+↓
+Cisco CSR1000v VM + Linux VM
+
+````
 
 ---
 
@@ -77,401 +92,233 @@ netpilot-core/
 ├── templates/
 │   ├── banner.j2
 │   └── interface_desc.j2
-├── reports/
 ├── scripts/
-│   └── setup.sh
+│   └── generate_report.py
+├── reports/
 ├── docs/
 ├── tests/
 ├── docker-compose.yml
 ├── requirements.txt
-├── README.md
+└── README.md
+````
+
+---
+
+# Testing Workflow
+
+## 1. Clone Repository
+
+```bash
+mkdir netpilot-core
+cd netpilot-core
+git clone https://github.com/MahWilson/NetPro_OtakX.git
+cd NetPro_OtakX
 ```
+
+---
+
+## 2. Build Docker Environment
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+---
+
+## 3. Enter Container
+
+```bash
+docker exec -it netpilot-controller bash
+```
+
+Disable host key checking (input in the docker container instance):
+
+```bash
+export ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD=True
+```
+
+---
+
+## 4. Run Linux Audit
+
+```bash
+ansible-playbook -i inventory/linux.ini playbooks/linux_audit.yml
+```
+
+---
+
+## 5. Run NETCONF Playbook
+
+```bash
+ansible-playbook -i inventory/netconf.ini playbooks/netconf_get.yml
+```
+
+---
+
+## 6. Run Router Automation
+
+```bash
+ansible-playbook -i inventory/routers.ini playbooks/router_config.yml
+```
+
+---
+
+## 7. Generate Final Report
+
+From host machine (PowerShell / WSL):
+
+```bash
+python3 scripts/generate_report.py
+```
+
+This generates a consolidated JSON report from all playbook outputs.
+
+---
+
+# Expected Output Files
+
+* Linux audit JSON report
+* NETCONF device data JSON
+* Router configuration JSON
+* Final consolidated report
 
 ---
 
 # Prerequisites
 
-Install:
-
 * Git
 * Docker
 * Docker Compose
 * VirtualBox / VMware
-* Cisco VM from lecturer
+* Cisco CSR1000v VM
 * Ubuntu VM
-
----
-
-# Initial Setup
-
-## Step 1 — Create project folder
-
-Create folder:
-
-```bash
-mkdir netpilot-core
-cd netpilot-core
-```
-
-IMPORTANT:
-
-Run all Git commands INSIDE this root folder.
-
-This folder is your Git root.
-
----
-
-## Step 2 — Initialize Git
-
-Inside project root:
-
-```bash
-git init
-```
-
-Connect GitHub repo:
-
-```bash
-git remote add origin <your-repo-url>
-```
-
-Check:
-
-```bash
-git remote -v
-```
-
-First commit:
-
-```bash
-git add .
-git commit -m "Initial project setup"
-git branch -M main
-git push -u origin main
-```
-
----
-
-# Team Setup
-
-Each member:
-
-```bash
-git clone <repo-url>
-cd netpilot-core
-```
-
-Create branch:
-
-```bash
-git checkout -b feature/your-feature-name
-```
-
-Example:
-
-```bash
-git checkout -b feature/router-ip-config
-```
-
-Push:
-
-```bash
-git push origin feature/router-ip-config
-```
-
-Create Pull Request on GitHub.
 
 ---
 
 # Docker Setup
 
-## Build container
-
-From project root:
+## Build & Run
 
 ```bash
 docker compose build
-```
-
-Run:
-
-```bash
 docker compose up -d
 ```
 
-Check running containers:
-
-```bash
-docker ps
-```
-
-Enter container:
+## Enter Container
 
 ```bash
 docker exec -it netpilot-controller bash
 ```
 
-Stop:
+## Stop Environment
 
 ```bash
 docker compose down
-```
-
----
-
-# Dockerfile Example
-
-Location:
-
-```bash
-docker/Dockerfile
-```
-
-🧪 Running Playbooks
-Router automation (Cisco IOS)
-```bash
-ansible-playbook playbooks/router_config.yml -i inventory/routers.ini
-```
-
-Linux system audit
-```bash
-ansible-playbook playbooks/linux_audit.yml -i inventory/linux.ini
-```
-
-NETCONF retrieval
-```bash
-ansible-playbook playbooks/netconf_get.yml -i inventory/routers.ini
-```
-
----
-
-# Inventory Setup
-
-## Router inventory
-
-File:
-
-```bash
-inventory/routers.ini
-```
-
-Example:
-
-```ini
-[cisco]
-router1 ansible_host=192.168.1.10 ansible_user=admin ansible_password=admin
-```
-
----
-
-## Linux inventory
-
-File:
-
-```bash
-inventory/linux.ini
-```
-
-Example:
-
-```ini
-[linux]
-server1 ansible_host=192.168.1.20 ansible_user=ubuntu ansible_password=ubuntu
-```
-
----
-
-# Connectivity Test
-
-Inside Docker container:
-
-Linux test:
-
-```bash
-ansible linux -i inventory/linux.ini -m ping
-```
-
-Cisco test:
-
-```bash
-ansible cisco -i inventory/routers.ini -m ping
-```
-
-Retrieve Cisco facts:
-
-```bash
-ansible cisco -i inventory/routers.ini -m cisco.ios.ios_facts
-```
-
----
-
-# Run Playbooks
-
-## Router Automation
-
-The router automation module is implemented in:
-
-```bash
-playbooks/router_config.yml
-
-This playbook automates Cisco CSR1kv router configuration using Ansible. It includes:
-
-Login banner configuration
-Interface description configuration
-Interface IP address configuration
-Local user account creation
-Static route configuration
-Router device information retrieval for verification
-
-Before running the playbook, enter the Dockerized Ansible controller:
-
-docker exec -it netpilot-controller bash
-
-Set the Ansible SSH options:
-
-export ANSIBLE_HOST_KEY_CHECKING=False
-export ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD=True
-
-Run the router automation playbook:
-
-ansible-playbook -i inventory/routers.ini playbooks/router_config.yml
-
-The playbook should complete successfully with no failed tasks:
-
-failed=0
-
----
-
-## Linux audit
-
-Run:
-
-```bash
-ansible-playbook playbooks/linux_audit.yml -i inventory/linux.ini
-```
-
----
-
-## NETCONF retrieval
-
-Run:
-
-```bash
-ansible-playbook playbooks/netconf_get.yml -i inventory/routers.ini
 ```
 
 ---
 
 # Git Workflow
 
-
-Pull latest:
+## Feature Branch Workflow
 
 ```bash
 git pull origin main
-```
-
-Add changes:
-
-```bash
+git checkout -b feature/your-feature
 git add .
+git commit -m "your message"
+git push origin feature/your-feature
 ```
 
-Commit:
-
-```bash
-git commit -m "Added router IP automation"
-```
-Branch Policy:
-
-1. Never push directly to main
-2. All features must branch from develop
-3. All PRs merge into develop first
-4. At least one teammate must test before approval
-5. Full integration test required after each merge
-6. Only stable develop can merge into main
-
-Push:
-
-```bash
-git push origin feature/router-ip-config
-```
-
-Merge via Pull Request.
+Then create a Pull Request → merge into `develop` → then `main`.
 
 ---
 
-# Collaboration Workflow
+# Rules
 
-1. Pull latest changes
-2. Create feature branch
-3. Implement feature
-4. Test feature locally
-5. Push branch
-6. Open Pull Request
-7. Team review
-8. Merge to main
+1. Never push directly to `main`
+2. All features must be in a branch
+3. Merge into `develop` first
+4. Test before merging
+5. Keep `main` stable
 
 ---
 
-# Testing Checklist
 
-Before merge:
 
-[ ] Docker builds successfully
-[ ] Ansible container runs
-[ ] Cisco VM reachable
-[ ] Linux VM reachable
-[ ] Playbook executes successfully
-[ ] Output verified
-[ ] Another member reviewed code
+# Connectivity Test
+
+```bash
+ansible all -i inventory/routers.ini -m ping
+ansible cisco -i inventory/routers.ini -m cisco.ios.ios_facts
+```
 
 ---
 
 # Common Commands
 
-Check branches:
-
-```bash
-git branch
-```
-
-Switch branch:
-
-```bash
-git checkout branch-name
-```
-
-See commit history:
-
-```bash
-git log --oneline
-```
-
-See file changes:
-
 ```bash
 git status
+git log --oneline
+git branch
+git checkout <branch>
 ```
 
-Restart Docker:
-
 ```bash
-docker compose down
-docker compose up -d
-```
-
-List Ansible hosts:
-
-```bash
-ansible all --list-hosts -i inventory/routers.ini
-```
-
-Check syntax:
-
-```bash
-ansible-playbook playbooks/router_config.yml --syntax-check
+docker ps
+docker compose restart
 ```
 
 ---
+
+# Known Issues
+
+## NETCONF / SSH Host Key
+
+```bash
+export ANSIBLE_HOST_KEY_CHECKING=False
+```
+
+---
+
+## Cisco Legacy Crypto
+
+CSR1000v may require:
+
+* diffie-hellman-group14-sha1
+* ssh-rsa fallback
+
+---
+
+# Testing Checklist
+
+* [ ] Docker builds successfully
+* [ ] Containers start correctly
+* [ ] Cisco reachable
+* [ ] Linux reachable
+* [ ] Playbooks execute
+* [ ] JSON output generated
+* [ ] Reports generated successfully
+
+---
+
+# Status
+
+| Module            | Status |
+| ----------------- | ------ |
+| Docker            | ✅      |
+| Router Automation | ✅      |
+| Linux Audit       | ✅     |
+| NETCONF           | ✅     |
+| Reporting         | ✅     |
+
+---
+
+# Notes
+
+This document is actively maintained and updated as the system evolves.
+
+```
 

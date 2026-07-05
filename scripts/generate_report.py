@@ -89,3 +89,18 @@ for report in linux_reports:
 html += "</div>"
 
 
+# NETCONF Section
+html += "<div class='section'><h2>NETCONF Device Data</h2>"
+
+for report in netconf_reports:
+    html += f"""
+    <h3>{report.get('hostname')}</h3>
+
+    <h4>Interfaces</h4>
+    <pre>{json.dumps(report.get('interfaces', {}), indent=2)}</pre>
+
+    <h4>System</h4>
+    <pre>{json.dumps(report.get('system', {}), indent=2)}</pre>
+    """
+
+html += "</div>"

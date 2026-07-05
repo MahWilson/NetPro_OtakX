@@ -2,7 +2,7 @@ import json
 import glob
 from pathlib import Path
 
-REPORT_DIR = Path("../reports")
+REPORT_DIR = Path(__file__).resolve().parent.parent / "reports"
 OUTPUT_FILE = REPORT_DIR / "report.html"
 
 

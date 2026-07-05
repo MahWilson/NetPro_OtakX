@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NetPilot Core Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #222;
+        }
+
+        .section {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        pre {
+            background: #111;
+            color: #00ff88;
+            padding: 10px;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>NetPilot Core Unified Report</h1>
+<div class='section'><h2>Linux System Audit</h2>
+    <h3>labvm</h3>
+    <p><b>Date:</b> Sun 05 Jul 2026 04:48:33 AM UTC</p>
+    <p><b>CPU:</b> AMD Ryzen 7 6800H with Radeon Graphics</p>
+    <p><b>Cores:</b> 2</p>
+
+    <h4>Memory</h4>
+    <pre>              total        used        free      shared  buff/cache   available
+Mem:          3.8Gi       607Mi       2.2Gi        17Mi       1.1Gi       3.0Gi
+Swap:         2.0Gi          0B       2.0Gi</pre>
+
+    <h4>Disk</h4>
+    <pre>Filesystem      Size  Used Avail Use% Mounted on
+udev            1.9G     0  1.9G   0% /dev
+tmpfs           394M  1.3M  393M   1% /run
+/dev/sda5        31G   16G   13G  56% /
+tmpfs           2.0G     0  2.0G   0% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           2.0G     0  2.0G   0% /sys/fs/cgroup
+/dev/loop2      157M  157M     0 100% /snap/chromium/1193
+/dev/loop3       55M   55M     0 100% /snap/core18/1754
+/dev/loop4      145M  145M     0 100% /snap/code/34
+/dev/loop5      106M  106M     0 100% /snap/core/17292
+/dev/loop6      128K  128K     0 100% /snap/bare/5
+/dev/loop0      106M  106M     0 100% /snap/core/17284
+/dev/loop7      165M  165M     0 100% /snap/gnome-3-28-1804/198
+/dev/loop1      188M  188M     0 100% /snap/chromium/3390
+/dev/loop8       56M   56M     0 100% /snap/core18/2999
+/dev/loop9       63M   63M     0 100% /snap/gtk-common-themes/1506
+/dev/loop10      64M   64M     0 100% /snap/core20/2769
+/dev/loop11     128M  128M     0 100% /snap/drawio/255
+/dev/loop12     395M  395M     0 100% /snap/mesa-2404/1165
+/dev/loop13      50M   50M     0 100% /snap/snapd/26865
+/dev/loop14      64M   64M     0 100% /snap/core20/2866
+/dev/loop16      92M   92M     0 100% /snap/gtk-common-themes/1535
+/dev/loop15      74M   74M     0 100% /snap/core22/2411
+/dev/loop17      88M   88M     0 100% /snap/drawio/33
+/dev/loop18     164M  164M     0 100% /snap/postman/113
+/dev/loop19      67M   67M     0 100% /snap/core24/1643
+/dev/loop21     175M  175M     0 100% /snap/postman/360
+/dev/loop20     607M  607M     0 100% /snap/gnome-46-2404/153
+/dev/loop22      67M   67M     0 100% /snap/core24/1587
+/dev/loop23      49M   49M     0 100% /snap/cups/1146
+/dev/loop24     162M  162M     0 100% /snap/gnome-3-28-1804/128
+/dev/sda1       511M  4.0K  511M   1% /boot/efi
+tmpfs           394M   16K  394M   1% /run/user/900</pre>
+
+    <h4>Logged-in Users</h4>
+    <pre>devasc   tty7         2026-07-05 04:47 (:0)
+devasc   pts/0        2026-07-05 04:48 (192.168.56.1)</pre>
+
+    <h4>Top Processes</h4>
+    <pre>USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         323  3.2  0.0      0     0 ?        I<   04:46   0:03 [kworker/0:1H-kblockd]
+devasc      3182  3.1  0.1  14124  6588 ?        S    04:48   0:00 sshd: devasc@pts/0
+root        2365  2.5  3.0 637052 121464 tty7    Ssl+ 04:47   0:02 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+root         856  1.6  1.0 1851020 41808 ?       Ssl  04:46   0:01 /usr/lib/snapd/snapd
+root        3090  1.6  0.2  13992  9176 ?        Ss   04:48   0:00 sshd: devasc [priv]</pre>
+    </div><div class='section'><h2>NETCONF Device Data</h2></div><div class='section'><h2>Cisco Router Configuration Backup</h2></div>
+</body>
+</html>

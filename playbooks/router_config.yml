@@ -55,3 +55,9 @@
         router_data:
           hostname: "{{ inventory_hostname }}"
           router_info: "{{ router_info.stdout_lines | default([]) }}"
+
+    - name: Save router automation data as JSON
+      copy:
+        content: "{{ router_data | to_nice_json }}"
+        dest: "/app/reports/{{ inventory_hostname }}_router_backup.json"
+      delegate_to: localhost

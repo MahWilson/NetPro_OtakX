@@ -8,12 +8,10 @@
     - name: "[1/4] Get device facts via NETCONF"
       ansible.netcommon.netconf_get:
         filter: |
-          <filter>
-            <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-              <hostname/>
-              <version/>
-            </native>
-          </filter>
+          <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+            <hostname/>
+            <version/>
+          </native>
       register: device_facts
       ignore_errors: yes
 
@@ -24,16 +22,14 @@
     - name: "[2/4] Get interface states via NETCONF"
       ansible.netcommon.netconf_get:
         filter: |
-          <filter>
-            <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
-              <interface>
-                <name/>
-                <admin-status/>
-                <oper-status/>
-                <speed/>
-              </interface>
-            </interfaces-state>
-          </filter>
+          <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+            <interface>
+              <name/>
+              <admin-status/>
+              <oper-status/>
+              <speed/>
+            </interface>
+          </interfaces-state>
       register: interface_states
       ignore_errors: yes
 
@@ -44,22 +40,20 @@
     - name: "[3/4] Get interface configuration via NETCONF"
       ansible.netcommon.netconf_get:
         filter: |
-          <filter>
-            <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
-              <interface>
-                <name/>
-                <description/>
-                <type/>
-                <enabled/>
-                <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
-                  <address>
-                    <ip/>
-                    <prefix-length/>
-                  </address>
-                </ipv4>
-              </interface>
-            </interfaces>
-          </filter>
+          <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+            <interface>
+              <name/>
+              <description/>
+              <type/>
+              <enabled/>
+              <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+                <address>
+                  <ip/>
+                  <prefix-length/>
+                </address>
+              </ipv4>
+            </interface>
+          </interfaces>
       register: interface_config
       ignore_errors: yes
 

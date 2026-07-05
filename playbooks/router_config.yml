@@ -2,7 +2,7 @@
 - name: Router Automation Configuration
   hosts: cisco
   gather_facts: no
-  connection: network_cli
+
 
   tasks:
     - name: Configure login banner

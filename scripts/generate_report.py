@@ -93,14 +93,27 @@ html += "</div>"
 html += "<div class='section'><h2>NETCONF Device Data</h2>"
 
 for report in netconf_reports:
+
+    def safe_xml(key, label):
+        val = report.get(key, f"No {label} data")
+        if isinstance(val, dict):
+            val = json.dumps(val, indent=2)
+        return str(val)[:3000]
+
     html += f"""
-    <h3>{report.get('hostname')}</h3>
+    <h3>{report.get('hostname', 'Unknown Device')}</h3>
 
-    <h4>Interfaces</h4>
-    <pre>{json.dumps(report.get('interfaces', {}), indent=2)}</pre>
+    <h4>Device Facts (Hostname / Version)</h4>
+    <pre>{safe_xml('device_facts', 'device facts')}</pre>
 
-    <h4>System</h4>
-    <pre>{json.dumps(report.get('system', {}), indent=2)}</pre>
+    <h4>Interface States (Admin/Oper Status)</h4>
+    <pre>{safe_xml('interface_states', 'interface states')}</pre>
+
+    <h4>Interface Configuration (IP Addresses)</h4>
+    <pre>{safe_xml('interface_config', 'interface config')}</pre>
+
+    <h4>Running Configuration</h4>
+    <pre>{safe_xml('running_config', 'running config')}</pre>
     """
 
 html += "</div>"

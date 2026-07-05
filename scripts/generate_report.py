@@ -112,16 +112,31 @@ html += "<div class='section'><h2>Cisco Router Configuration Backup</h2>"
 for report in router_reports:
     html += f"""
     <h3>{report.get('hostname')}</h3>
-
-    <h4>Running Configuration</h4>
-    <pre>{"\n".join(report.get('running_config', []))}</pre>
-
-    <h4>Interface Status</h4>
-    <pre>{"\n".join(report.get('interface_status', []))}</pre>
-
-    <h4>Routing Table</h4>
-    <pre>{"\n".join(report.get('routing_table', []))}</pre>
     """
+
+    router_info = report.get('router_info', [])
+
+    titles = [
+        "Show Version",
+        "Interface Status",
+        "User Configuration",
+        "Banner Configuration",
+        "Interface Description",
+        "Static Routes"
+    ]
+
+    for i, output in enumerate(router_info):
+        title = titles[i] if i < len(titles) else f"Command {i+1}"
+
+        if isinstance(output, list):
+            content = "\n".join(output)
+        else:
+            content = str(output)
+
+        html += f"""
+        <h4>{title}</h4>
+        <pre>{content}</pre>
+        """
 
 html += "</div>"
 

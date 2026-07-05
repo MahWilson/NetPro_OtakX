@@ -6,7 +6,8 @@
   tasks:
 
     - name: "[1/4] Get device facts via NETCONF"
-      netconf_get:
+      ansible.netcommon.netconf_get:
+        display: pretty
         filter: |
           <filter>
             <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
@@ -19,10 +20,11 @@
 
     - name: "[1/4] Display device facts"
       debug:
-        msg: "{{ device_facts.output | default('No data returned') }}"
+        msg: "{{ device_facts.output | default('No data returned') | string | truncate(3000, False, '') }}"
 
     - name: "[2/4] Get interface states via NETCONF"
-      netconf_get:
+      ansible.netcommon.netconf_get:
+        display: pretty
         filter: |
           <filter>
             <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
@@ -39,10 +41,11 @@
 
     - name: "[2/4] Display interface states"
       debug:
-        msg: "{{ interface_states.output | default('No interface data returned') }}"
+        msg: "{{ interface_states.output | default('No interface data returned') | string | truncate(3000, False, '') }}"
 
     - name: "[3/4] Get interface configuration via NETCONF"
-      netconf_get:
+      ansible.netcommon.netconf_get:
+        display: pretty
         filter: |
           <filter>
             <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
@@ -65,39 +68,40 @@
 
     - name: "[3/4] Display interface configuration"
       debug:
-        msg: "{{ interface_config.output | default('No interface config returned') }}"
+        msg: "{{ interface_config.output | default('No interface config returned') | string | truncate(3000, False, '') }}"
 
     - name: "[4/4] Get full running configuration via NETCONF"
-      netconf_get:
+      ansible.netcommon.netconf_get:
         source: running
+        display: pretty
       register: running_config
       ignore_errors: yes
 
     - name: "[4/4] Display running configuration (first 3000 chars)"
       debug:
-        msg: "{{ (running_config.output | default('No running config returned'))[:3000] }}"
+        msg: "{{ running_config.output | default('No running config returned') | string | truncate(3000, False, '') }}"
 
-    - name: "NETCONF retrieval complete"
+    - name: NETCONF retrieval complete
       debug:
         msg:
           - "============================================"
           - " NETCONF Data Retrieval Summary"
           - "============================================"
-          - " Device Facts   : {{ 'OK' if device_facts is not failed else 'FAILED' }}"
-          - " Interface State: {{ 'OK' if interface_states is not failed else 'FAILED' }}"
-          - " Interface Config: {{ 'OK' if interface_config is not failed else 'FAILED' }}"
-          - " Running Config  : {{ 'OK' if running_config is not failed else 'FAILED' }}"
+          - " Device Facts   : {{ 'FAILED' if device_facts.failed | default(false) else 'OK' }}"
+          - " Interface State: {{ 'FAILED' if interface_states.failed | default(false) else 'OK' }}"
+          - " Interface Config: {{ 'FAILED' if interface_config.failed | default(false) else 'OK' }}"
+          - " Running Config  : {{ 'FAILED' if running_config.failed | default(false) else 'OK' }}"
           - "============================================"
 
     - name: Consolidate NETCONF data into JSON
       set_fact:
         netconf_data:
           hostname: "{{ inventory_hostname }}"
-          device_facts: "{{ device_facts.output | default('No data returned') }}"
-          interface_states: "{{ interface_states.output | default('No interface data returned') }}"
-          interface_config: "{{ interface_config.output | default('No interface config returned') }}"
-          running_config: "{{ running_config.output | default('No running config returned') }}"
-          
+          device_facts: "{{ device_facts.output | default('No data returned') | string }}"
+          interface_states: "{{ interface_states.output | default('No interface data returned') | string }}"
+          interface_config: "{{ interface_config.output | default('No interface config returned') | string }}"
+          running_config: "{{ running_config.output | default('No running config returned') | string }}"
+
     - name: Save NETCONF data as JSON
       copy:
         content: "{{ netconf_data | to_nice_json }}"

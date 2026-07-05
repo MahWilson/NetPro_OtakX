@@ -88,3 +88,12 @@
           - " Interface Config: {{ 'OK' if interface_config is not failed else 'FAILED' }}"
           - " Running Config  : {{ 'OK' if running_config is not failed else 'FAILED' }}"
           - "============================================"
+
+    - name: Consolidate NETCONF data into JSON
+      set_fact:
+        netconf_data:
+          hostname: "{{ inventory_hostname }}"
+          device_facts: "{{ device_facts.output | default('No data returned') }}"
+          interface_states: "{{ interface_states.output | default('No interface data returned') }}"
+          interface_config: "{{ interface_config.output | default('No interface config returned') }}"
+          running_config: "{{ running_config.output | default('No running config returned') }}"
